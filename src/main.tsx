@@ -18,8 +18,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <PersistGate loading={<ProgressSpinner />} persistor={persistor}>
         <BrowserRouter>
           <Routes>
-            <Route path="/Auth" element={<Auth/>}/>
-            <Route path="/" element={<App />} />
+            <Route path="/" element={<Auth/>}/>
+            <Route path="/Home" element={<App />} />
             <Route
               path="/activityReport/:modelId"
               element={<TaskActivityReport />}

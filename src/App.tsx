@@ -125,7 +125,7 @@ function App() {
 
   const workList = () =>{
     console.log("ty");
-    
+    let dataSample = []
     let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getActivityList?projectId=1",{
         
         method: 'GET',
@@ -150,8 +150,9 @@ function App() {
           
         })
         //setProjectsActivity(data);
-        setProjectsActivity([...data]);
-        console.log(projectsActivity)
+        dataSample= [...data];
+        setProjectsActivity([...dataSample])
+        console.log(setProjectsActivity)
 
         console.log(dataList)
         //setTree(data)
