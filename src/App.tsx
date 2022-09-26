@@ -28,7 +28,7 @@ function App() {
   const [nodes, setNodes] = useState({ root: [] });
 
   const [parentTasks, setParentTasks] = useState([]);
-
+  const [tree,setTree] = useState([])
   const menu = useRef(null);
   const subTaskMenu = useRef(null);
 
@@ -37,9 +37,11 @@ function App() {
   const [isActivity, setIsActivity] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const [toggleKeyDialog, setToggleKeyDialog] = useState(false);
-
+  
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [projectsActivity,setProjectsActivity] = useState([]);
 
   const toggleModal = () => {
     setAddTaskToggle(!addTaskToggle);
@@ -52,8 +54,10 @@ function App() {
   };
 
   useEffect(() => {
+    console.log("works")
+    workList();
+    console.log(projectsActivity)
     const treeData = mapTaskActivityToTree(taskActivities);
-
     const parents = taskActivities.filter(
       (activity) => activity.parentId === 0
     );
@@ -119,6 +123,51 @@ function App() {
     },
   ];
 
+  const workList = () =>{
+    console.log("ty");
+    
+    let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getActivityList?projectId=1",{
+        
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }, 
+        mode: 'cors'
+      }).then((response) => {
+        return response.json();                
+    }).then(pro => {
+        console.log(pro);
+        let data = [];
+        let dataList = [];
+        pro.map(element=>{
+          console.log(element)
+          data.push({key:element.project.id,name:element.name,budget:element.project.projectBudget,isActivity:true})
+          let id = element.project.id;
+          element.subActivityList.map(subActi=>{
+            dataList.push({projectId:id,id:subActi.id,name:subActi.name})
+          })
+          
+        })
+        //setProjectsActivity(data);
+        setProjectsActivity([...data]);
+        console.log(projectsActivity)
+
+        console.log(dataList)
+        //setTree(data)
+        return data
+    
+    }).catch(error => {
+        console.log(error);
+    });
+    data();
+    console.log(projectsActivity)
+
+   // const data = await res.json();
+    //console.log(data);
+}
+
+
   const taskNameView = (taskRowData: TaskActivityModel) => {
     return (
       <span className={`${taskRowData.isActivity ? "text-pink-600" : ""}`}>
@@ -135,9 +184,9 @@ function App() {
         onClick={(event) => {
           const { data } = taskActivityRowData;
           console.log(taskActivityRowData);
-          setTaskParentNode(data.modelId);
-          setTaskTitle(data.name);
-          if (!data.isActivity) {
+          setTaskParentNode(taskActivityRowData.key);
+          setTaskTitle(taskActivityRowData.name);
+          if (!taskActivityRowData.isActivity) {
             menu.current.toggle(event);
           } else {
             subTaskMenu.current.toggle(event);
@@ -195,9 +244,11 @@ function App() {
       </div>
     );
   };
+
   return (
     <>
       <ConfirmDialog />
+    
       <div className="bg-gray-100 h-screen w-screen">
         <div className="bg-white mt-4 mx-6 px-8">
           {addTaskToggle && (
@@ -256,8 +307,8 @@ function App() {
               <div>
                 <div className="card mx-8">
                   <p className="text-xl">Activities</p>
-
-                  <TreeTable value={nodes.root}>
+                  
+                  <TreeTable value={projectsActivity}>
                     <Column
                       field="name"
                       header="Name"
@@ -266,6 +317,8 @@ function App() {
                     ></Column>
                     <Column header="Budget" field="budget"/>
                     <Column header="Action" body={userAction}></Column>
+                     
+                    
                   </TreeTable>
                 </div>
               </div>

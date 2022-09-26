@@ -6,18 +6,21 @@ import { useAppDispatch } from "../../../store/store";
 import { DefaultBtn } from "../../form/DefaultBtn";
 import { FormInput } from "../../form/FormInput";
 
-export const AddEquipmentCostDialog = ({
+export const AddLabourCost = ({
   onHide,
   visible,
   modelId,
   title,
   isMaterial,
 }) => {
-  const [typeOfEquipment, setTypeOfEquipment] = useState();
-  const [quatity, setQuatity] = useState();
-  const [hourlyRate, setHourlyRate] = useState();
-  const [utitlyFactor, setUtitlyFactor] = useState();
-  const [operationHour, setOperationHour] = useState();
+  const [crewName, setCrewName] = useState();
+  const [dailyCostPerHour, setdailyCostPerHour] = useState();
+  const [quantityOfmanPower, setquantityOfmanPower] = useState();
+  const [morningHour, setmorningHour] = useState();
+  const [afterNoonHour, setAfterNoonHour] = useState();
+  const [overTime, setoverTime] = useState();
+  const [utilityFactor, setUtilityFactor] = useState();
+  const [totalHour, setTotalHour] = useState();
   const [date, setDate] = useState("");
 
   const appDispatch = useAppDispatch();
@@ -25,13 +28,16 @@ export const AddEquipmentCostDialog = ({
   const addMaterialCostCallBack = () => {
     
     let formData = {"subActivity":modelId
-    ,"typeOfEquipment":typeOfEquipment
-    ,"quatity":quatity
-    ,"hourlyRate":hourlyRate
-    ,"utitlyFactor":utitlyFactor
-    ,"operationHour":operationHour 
-    ,"date":date+"T01:36:08.775Z"};
-    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/registerEquipmentCost"; 
+    ,"crewName":crewName
+    ,"dailyCostPerHour":dailyCostPerHour
+    ,"quantityOfmanPower":quantityOfmanPower
+    ,"morningHour":morningHour
+    ,"afterNoonHour":afterNoonHour 
+    ,"overTime":overTime
+    ,"utilityFactor":utilityFactor 
+    ,"totalHour":totalHour
+    ,"date":date+"T01:36:08.775Z"}
+    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/registerLaborCost"; 
     axios.post(url,formData,{
       headers:{"Content-Type" : "application/json"}})
     .then(res => {
@@ -52,30 +58,44 @@ export const AddEquipmentCostDialog = ({
       <div className="formgroup">
         <FormInput
           defaultValue={""}
-          labelName={"Type Of Equipment"}
-          onUpdate={(val) => setTypeOfEquipment(val)}
+          labelName={"Crew Name"}
+          onUpdate={(val) => setCrewName(val)}
         />
         <FormInput
           defaultValue={""}
-          labelName={"Quatity"}
-          onUpdate={(val) => setQuatity(val)}
+          labelName={"dailyCostPerHour"}
+          onUpdate={(val) => setdailyCostPerHour(val)}
         />
         <FormInput
           defaultValue={""}
-          labelName={"Hourly Rate"}
-          onUpdate={(val) => setHourlyRate(val)}
+          labelName={"Quantity Of man Power"}
+          onUpdate={(val) => setquantityOfmanPower(val)}
         />
         <FormInput
           defaultValue={""}
-          labelName={"Utitly Factor"}
-          onUpdate={(val) => setUtitlyFactor(val)}
+          labelName={"Morning Hour"}
+          onUpdate={(val) => setmorningHour(val)}
+        />
+<FormInput
+          defaultValue={""}
+          labelName={"AfterNoon Hour"}
+          onUpdate={(val) => setAfterNoonHour(val)}
         />
         <FormInput
           defaultValue={""}
-          labelName={"Operation Hour"}
-          onUpdate={(val) => setOperationHour(val)}
+          labelName={"overTime"}
+          onUpdate={(val) => setoverTime(val)}
         />
-        
+        <FormInput
+          defaultValue={""}
+          labelName={"Utility Factor"}
+          onUpdate={(val) => setUtilityFactor(val)}
+        />
+        <FormInput
+          defaultValue={""}
+          labelName={"total Hour"}
+          onUpdate={(val) => setTotalHour(val)}
+        />
         <div className="flex flex-column">
           <label className="py-2 text-base font-bold">Date</label>
 

@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { DefaultBtn } from "../../form/DefaultBtn";
 import { AddSubContractDialog } from "./AddSubContract";
 
-export const SubContractView = ({ modelId, cost }) => {
+export const SubContractView = ({ modelId, cost,subContaract }) => {
   const [modalToggle, setModalToggle] = useState(false);
 
   const [isParent, setIsParent] = useState(false);
@@ -77,7 +77,7 @@ export const SubContractView = ({ modelId, cost }) => {
         />
       )}
 
-      <DataTable value={subContracts}>
+      <DataTable value={subContaract}>
         <Column field="name" header="Name" />
         <Column field="price" header="Price" />
         <Column body={removeAction} header="Action" />

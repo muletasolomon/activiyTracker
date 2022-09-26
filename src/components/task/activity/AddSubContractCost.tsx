@@ -6,41 +6,34 @@ import { useAppDispatch } from "../../../store/store";
 import { DefaultBtn } from "../../form/DefaultBtn";
 import { FormInput } from "../../form/FormInput";
 
-export const AddEquipmentCostDialog = ({
+export const AddMaterialCost = ({
   onHide,
   visible,
   modelId,
   title,
   isMaterial,
 }) => {
-  const [typeOfEquipment, setTypeOfEquipment] = useState();
-  const [quatity, setQuatity] = useState();
-  const [hourlyRate, setHourlyRate] = useState();
-  const [utitlyFactor, setUtitlyFactor] = useState();
-  const [operationHour, setOperationHour] = useState();
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [subContractHour, setSubContractHour] = useState("");
   const [date, setDate] = useState("");
 
   const appDispatch = useAppDispatch();
 
   const addMaterialCostCallBack = () => {
-    
     let formData = {"subActivity":modelId
-    ,"typeOfEquipment":typeOfEquipment
-    ,"quatity":quatity
-    ,"hourlyRate":hourlyRate
-    ,"utitlyFactor":utitlyFactor
-    ,"operationHour":operationHour 
-    ,"date":date+"T01:36:08.775Z"};
-    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/registerEquipmentCost"; 
+    ,"name":name
+    ,"price":price
+    ,"subContractHour":subContractHour
+    ,"date":date+"T01:36:08.775Z"}
+    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/registerSubConractCost"; 
     axios.post(url,formData,{
       headers:{"Content-Type" : "application/json"}})
     .then(res => {
-        console.log(res.data)
-        onHide();
+       onHide()
     })
     .catch(err => console.log(err));
-
-  };
+  }
 
   return (
     <Dialog
@@ -52,30 +45,20 @@ export const AddEquipmentCostDialog = ({
       <div className="formgroup">
         <FormInput
           defaultValue={""}
-          labelName={"Type Of Equipment"}
-          onUpdate={(val) => setTypeOfEquipment(val)}
+          labelName={"Name"}
+          onUpdate={(val) => setName(val)}
         />
         <FormInput
           defaultValue={""}
-          labelName={"Quatity"}
-          onUpdate={(val) => setQuatity(val)}
+          labelName={"Price"}
+          onUpdate={(val) => setPrice(val)}
         />
         <FormInput
           defaultValue={""}
-          labelName={"Hourly Rate"}
-          onUpdate={(val) => setHourlyRate(val)}
+          labelName={"SubContract Hour"}
+          onUpdate={(val) => setSubContractHour(val)}
         />
-        <FormInput
-          defaultValue={""}
-          labelName={"Utitly Factor"}
-          onUpdate={(val) => setUtitlyFactor(val)}
-        />
-        <FormInput
-          defaultValue={""}
-          labelName={"Operation Hour"}
-          onUpdate={(val) => setOperationHour(val)}
-        />
-        
+
         <div className="flex flex-column">
           <label className="py-2 text-base font-bold">Date</label>
 

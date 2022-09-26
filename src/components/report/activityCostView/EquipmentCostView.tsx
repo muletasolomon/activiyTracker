@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { DefaultBtn } from "../../form/DefaultBtn";
 import { AddEquipmentCostDialog } from "./AddEquipmentCost";
 
-export const EquipmentCostView = ({ modelId, cost }) => {
+export const EquipmentCostView = ({ modelId, cost,equipmentCost }) => {
   const [modalToggle, setModalToggle] = useState(false);
 
   const [isParent, setIsParent] = useState(false);
@@ -73,10 +73,10 @@ export const EquipmentCostView = ({ modelId, cost }) => {
         />
       )}
 
-      <DataTable value={equipmentCosts}>
-        <Column field="TypeofEquipment" header="Type Of Equipment" />
-        <Column field="no" header="No" />
-        <Column field="dailyCost" header="Daily Cost" />
+      <DataTable value={equipmentCost}>
+        <Column field="typeOfEquipment" header="Type Of Equipment" />
+        <Column field="quantity" header="No" />
+        <Column field="projectBudjet" header="Daily Cost" />
         <Column header="Action" body={removeAction} />
       </DataTable>
       <p className="mt-4 font-semibold text-base">Total Amount : {cost}</p>

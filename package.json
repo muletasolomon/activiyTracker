@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build": "task-creator build --mode development",
+    "start": "task-creator --plugins=local-dir:plugins"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.2",
@@ -15,19 +16,20 @@
     "@types/react-redux": "^7.1.24",
     "axios": "^0.27.2",
     "chart.js": "^3.8.0",
+    "create-react-app": "^5.0.1",
     "primeicons": "^5.0.0",
-    "primereact": "^8.1.1",
+    "primereact": "^8.6.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.33.1",
     "react-redux": "^8.0.2",
     "react-router-dom": "^6.3.0",
-    "redux-thunk": "^2.4.1",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^1.3.0",
     "typescript": "^4.6.3",
     "vite": "^2.9.9"

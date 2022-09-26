@@ -10,6 +10,7 @@ import { TaskList } from "./components/task/TaskList";
 import "./index.css";
 
 import store, { persistor } from "./store/store";
+import Auth from "./components/Auth";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <PersistGate loading={<ProgressSpinner />} persistor={persistor}>
         <BrowserRouter>
           <Routes>
+            <Route path="/Auth" element={<Auth/>}/>
             <Route path="/" element={<App />} />
             <Route
               path="/activityReport/:modelId"

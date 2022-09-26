@@ -1,38 +1,73 @@
+import axios from "axios";
 import { Dialog } from "primereact/dialog";
 import React, { useState } from "react";
-import { addSubContract } from "../../../store/features/taskActivitySlice";
+import { addLaborCost, addMaterialCost } from "../../../store/features/taskActivitySlice";
 import { useAppDispatch } from "../../../store/store";
 import { DefaultBtn } from "../../form/DefaultBtn";
 import { FormInput } from "../../form/FormInput";
 
-export const AddSubContractDialog = ({ onHide, visible, modelId }) => {
-  const dispatch = useAppDispatch();
+export const AddSubContractDialog = ({
+  onHide,
+  visible,
+  modelId,
+  title,
+  isMaterial,
+}) => {
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [subContractHour, setSubContractHour] = useState("");
+  const [date, setDate] = useState("");
 
-  const [price, setPrice] = useState();
-  const [name, setName] = useState();
+  const appDispatch = useAppDispatch();
 
-  const addSubContractCallBack = () => {
-    dispatch(
-      addSubContract({
-        modelId: modelId,
-        subContract: {
-          name: name,
-          price: price,
-        },
-      })
-    );
-  };
+  const addMaterialCostCallBack = () => {
+    let formData = {"subActivity":modelId
+    ,"name":name
+    ,"price":price
+    ,"subContractHour":subContractHour
+    ,"date":date+"T01:36:08.775Z"}
+    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/registerSubConractCost"; 
+    axios.post(url,formData,{
+      headers:{"Content-Type" : "application/json"}})
+    .then(res => {
+       onHide()
+    })
+    .catch(err => console.log(err));
+  }
+
   return (
     <Dialog
-      header="Add Sub-Contract Cost"
-      onHide={onHide}
+      header={title}
       visible={visible}
-      style={{ width: "50vw" }}
+      style={{ width: "70vw" }}
+      onHide={() => onHide()}
     >
-      <FormInput labelName={"Name"} onUpdate={(data) => setName(data)} />
-      <FormInput labelName={"Price"} onUpdate={(data) => setPrice(data)} />
+      <div className="formgroup">
+        <FormInput
+          defaultValue={""}
+          labelName={"Name"}
+          onUpdate={(val) => setName(val)}
+        />
+        <FormInput
+          defaultValue={""}
+          labelName={"Price"}
+          onUpdate={(val) => setPrice(val)}
+        />
+        <FormInput
+          defaultValue={""}
+          labelName={"SubContract Hour"}
+          onUpdate={(val) => setSubContractHour(val)}
+        />
 
-      <DefaultBtn name={"Add Sub-Contract"} callBack={addSubContractCallBack} />
+        <div className="flex flex-column">
+          <label className="py-2 text-base font-bold">Date</label>
+
+          <input type="date" name="open"  onChange={e=>setDate(e.target.value)}
+                className="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none ml-4 focus:border-primary"
+                />
+        </div>
+        <DefaultBtn name={"Add Cost"} callBack={addMaterialCostCallBack} style={""} />
+      </div>
     </Dialog>
   );
 };

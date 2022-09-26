@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../../store/store";
 import { DefaultBtn } from "../../form/DefaultBtn";
 import { FormInput } from "../../form/FormInput";
 
-export const AddEquipmentCostDialog = ({
+export const AddLabourCost = ({
   onHide,
   visible,
   modelId,

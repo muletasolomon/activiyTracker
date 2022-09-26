@@ -6,6 +6,7 @@ import { ControlledInput } from "../form/ControlledInput";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { addTask } from "../../store/features/taskActivitySlice";
 import { Divider } from "primereact/divider";
+import axios from "axios";
 
 export const AddTaskDialog = ({
   onHide,
@@ -30,23 +31,17 @@ export const AddTaskDialog = ({
   );
 
   const addTaskOnClick = () => {
-    dispatch(
-      addTask({
-        isActivity: isActivity,
-        modelId: Math.floor(Math.random() * 1000),
-        name: !isActivity ? name : keys.find((k) => k.value == key).label,
-        parentId: taskParentId ? taskParentId : 0,
-        projectId: projectId,
-        key: key,
-        equipmentCosts: [],
-        laborCosts: [],
-        materialCosts: [],
-        subContracts:[],
-        budget:budget
-      })
-    );
-
-    onHide();
+    let formData = {
+    "name":name
+    ,"budget":budget 
+  }
+    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/registerActivity"; 
+    axios.post(url,formData,{
+      headers:{"Content-Type" : "application/json"}})
+    .then(res => {
+       onHide()
+    })
+    .catch(err => console.log(err));
   };
 
   return (

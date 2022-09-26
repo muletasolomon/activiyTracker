@@ -9,6 +9,7 @@ import { EquipmentCostView } from "./activityCostView/EquipmentCostView";
 import { BudgetReport } from "../task/activity/budget/BudgetReport";
 import { TaskActivityModel } from "../../model/TaskActivityModel";
 import { SubContractView } from "./activityCostView/SubContractView";
+import { LaborCostView } from "./activityCostView/LaborCostView";
 
 export const TaskActivityReport = () => {
   const params = useParams();
@@ -27,6 +28,10 @@ export const TaskActivityReport = () => {
   const [laborCostTotal, setlabortCostTotal] = useState<number>(0);
   const [subContractTotal, setSubContractTotal] = useState<number>(0);
 
+  const [materialCost,setMaterialCost] = useState();
+  const [equpimentCost,setEqupimentCost] = useState();
+  const [laborCosts,setLaborCosts] = useState();
+  const [subContractCosts,setSubContractCosts] = useState();
   const taskActivities: TaskActivityModel[] = useAppSelector(
     (state) => state.taskActivity.taskActivities
   );
@@ -41,11 +46,45 @@ export const TaskActivityReport = () => {
     },
   });
 
+  const workList = () =>{
+    console.log("ty");
+    
+    return fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getSubActivityDetail?subActivityId=1",{
+        
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }, 
+        mode: 'cors'
+      }).then((response) => {
+        return response.json();                
+    }).then(data => {
+        console.log(data.equipmentCosts);
+        var material = 0;
+        setmaterialCostTotal(data.totalMaterialCost);
+        setlabortCostTotal(data.totalLaborCostPerDay);
+        setequipmentCostTotal(data.totalEquipmentCostPerDay);
+        setSubContractTotal(data.subContractCost);
+        console.log(materialCostTotal)
+        //setMaterialCost(material)
+        setMaterialCost(data.materialCosts);
+        setEqupimentCost(data.equipmentCosts);
+        setLaborCosts(data.laborCosts);
+        setSubContractCosts(data.subContractCosts);
+    }).catch(error => {
+        console.log(error);
+    });
+   // const data = await res.json();
+    //console.log(data);
+}
+
   useEffect(() => {
     setTitle(queryParams.get("name") || "");
   }, [queryParams]);
 
   useEffect(() => {
+    workList();
     const selectedTask = taskActivities.find(
       (task) => task.modelId == +params.modelId
     );
@@ -131,23 +170,28 @@ export const TaskActivityReport = () => {
                 title={"Material Cost Breakdown"}
                 modalTitle={"Add Material Cost"}
                 modelId={params.modelId}
+                material = {materialCost}
+                materialTotal = {materialCostTotal}
               />
               <Divider />
               <EquipmentCostView
                 modelId={params.modelId}
                 cost={equipmentCostTotal}
+                equipmentCost = {equpimentCost}
               />
               <Divider />
-              <MaterialCostView
+              <LaborCostView
                 isMaterial={false}
                 title={"Labor Cost Breakdown"}
                 modalTitle={"Add Labor Cost"}
                 modelId={params.modelId}
+                material = {laborCosts}
               />
 
               <SubContractView
                 modelId={params.modelId}
                 cost={subContractTotal}
+                subContaract = {subContractCosts}
               />
             </div>
 

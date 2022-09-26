@@ -9,15 +9,15 @@ import {
   removeMaterialCost,
 } from "../../../store/features/taskActivitySlice";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
+import { AddLabourCost } from "../../task/activity/AddLabourCost";
 import { AddMaterialCost } from "../../task/activity/AddMaterialCost";
 
-export const MaterialCostView = ({
+export const LaborCostView = ({
   isMaterial,
   title,
   modalTitle,
   modelId,
   material,
-  materialTotal,
 }) => {
   const [modalToggle, setModalToggle] = useState(false);
 
@@ -122,7 +122,7 @@ export const MaterialCostView = ({
       <Toast ref={toast} />
 
       {modalToggle && (
-        <AddMaterialCost
+        <AddLabourCost
           title={modalTitle}
           isMaterial={isMaterial}
           onHide={toggleModal}
@@ -141,17 +141,21 @@ export const MaterialCostView = ({
         />
       )}
 
-      <DataTable value={isMaterial ? material : laborCosts}>
-        <Column header="Name" field="name" />
-        <Column header="Price" field="price" />
-        <Column header="Unit" field="unit" />
-        <Column header="Qty" field="quantity" />
+      <DataTable value={material}>
+        <Column header="Name" field="crewName" />
+        <Column header="Price" field="totalHour" />
+        <Column header="Cost per Hour" field="dailyCostPerHour" />
+        <Column header="Qty" field="quantityOfmanPower" />
+        <Column header="UF" field="utilityFactor" />
+        <Column header="MH" field="morningHour" />
+        <Column header="OT" field="overTime" />
+        
         <Column header="Action" body={removeAction} />
       </DataTable>
 
       {(isMaterial ? totalCost : laborCostTotal) > 0 && (
         <p className="mt-4 font-bold text-base">
-          Total Amount : {isMaterial ? materialTotal : laborCostTotal} Birr
+          Total Amount : {isMaterial ? totalCost : laborCostTotal} Birr
         </p>
       )}
     </div>
