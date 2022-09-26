@@ -40,11 +40,11 @@ export default function() {
           />
           </div>
           <div className="form-group mt-3">
-            <FormInput
-            defaultValue={""}
-            labelName={"Enter password"}
-            onUpdate={(val) => setPassord(val)}
-          />
+          <div className="flex flex-column">
+            <label className="py-2 text-base font-bold">{"Enter password"}</label>
+
+            <ControlledInput onUpdate={(val) => setPassord(val)} defaultValue={""} type={"password"}/>
+          </div>
            
           </div>
           <div className="d-grid gap-2 mt-3 login-button-holder">
