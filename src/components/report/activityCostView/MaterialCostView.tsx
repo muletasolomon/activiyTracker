@@ -19,6 +19,7 @@ export const MaterialCostView = ({
   material,
   materialTotal,
 }) => {
+  console.log(materialTotal)
   const [modalToggle, setModalToggle] = useState(false);
 
   const [materialCosts, setMaterialCosts] = useState<MaterialCost[]>([]);
@@ -146,12 +147,13 @@ export const MaterialCostView = ({
         <Column header="Price" field="price" />
         <Column header="Unit" field="unit" />
         <Column header="Qty" field="quantity" />
+        <Column header="Executed Quantity" field="executedQuantity" />
         <Column header="Action" body={removeAction} />
       </DataTable>
 
-      {(isMaterial ? totalCost : laborCostTotal) > 0 && (
+      {(isMaterial ? materialTotal : laborCostTotal) > 0 && (
         <p className="mt-4 font-bold text-base">
-          Total Amount : {isMaterial ? materialTotal : laborCostTotal} Birr
+          Total Amount : {materialTotal} Birr
         </p>
       )}
     </div>

@@ -80,6 +80,8 @@ export const SubContractView = ({ modelId, cost,subContaract }) => {
       <DataTable value={subContaract}>
         <Column field="name" header="Name" />
         <Column field="price" header="Price" />
+        <Column field="subContractHour" header="SubContract Hour" />
+
         <Column body={removeAction} header="Action" />
       </DataTable>
       <p className="mt-4 font-semibold text-base">Total Amount : {cost}</p>

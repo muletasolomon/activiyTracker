@@ -18,6 +18,7 @@ export const LaborCostView = ({
   modalTitle,
   modelId,
   material,
+  total,
 }) => {
   const [modalToggle, setModalToggle] = useState(false);
 
@@ -143,7 +144,7 @@ export const LaborCostView = ({
 
       <DataTable value={material}>
         <Column header="Name" field="crewName" />
-        <Column header="Price" field="totalHour" />
+        <Column header="Total Hour" field="totalHour" />
         <Column header="Cost per Hour" field="dailyCostPerHour" />
         <Column header="Qty" field="quantityOfmanPower" />
         <Column header="UF" field="utilityFactor" />
@@ -153,9 +154,9 @@ export const LaborCostView = ({
         <Column header="Action" body={removeAction} />
       </DataTable>
 
-      {(isMaterial ? totalCost : laborCostTotal) > 0 && (
+      {(isMaterial ? total : total) > 0 && (
         <p className="mt-4 font-bold text-base">
-          Total Amount : {isMaterial ? totalCost : laborCostTotal} Birr
+          Total Amount : {isMaterial ? total : total} Birr
         </p>
       )}
     </div>

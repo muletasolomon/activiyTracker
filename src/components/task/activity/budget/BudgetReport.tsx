@@ -34,7 +34,7 @@ export const BudgetReport = ({
 
     setParentTask(task);
   }, [tasks]);
-
+  console.log("ante +++++",equipmentCost)
   return (
     <>
       <div className="w-4">

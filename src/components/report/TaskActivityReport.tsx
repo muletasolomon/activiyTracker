@@ -49,7 +49,7 @@ export const TaskActivityReport = () => {
   const workList = () =>{
     console.log("ty");
     
-    return fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getSubActivityDetail?subActivityId=1",{
+    return fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getSubActivityDetail?subActivityId="+params.modelId,{
         
         method: 'GET',
         headers: {
@@ -60,7 +60,7 @@ export const TaskActivityReport = () => {
       }).then((response) => {
         return response.json();                
     }).then(data => {
-        console.log(data.equipmentCosts);
+        console.log(data);
         var material = 0;
         setmaterialCostTotal(data.totalMaterialCost);
         setlabortCostTotal(data.totalLaborCostPerDay);
@@ -72,6 +72,7 @@ export const TaskActivityReport = () => {
         setEqupimentCost(data.equipmentCosts);
         setLaborCosts(data.laborCosts);
         setSubContractCosts(data.subContractCosts);
+        setSelectedTask(true)
     }).catch(error => {
         console.log(error);
     });
@@ -94,67 +95,25 @@ export const TaskActivityReport = () => {
     const isParentTask = selectedTask ? !selectedTask.isActivity : false;
     setIsParent(selectedTask ? !selectedTask.isActivity : false);
 
-    const materialCost = taskActivities
-      .filter(
-        (taskModel) =>
-          taskModel.modelId == +params.modelId ||
-          (isParentTask ? taskModel.parentId == +params.modelId : false)
-      )
-      .flatMap((taskActivity) => taskActivity.materialCosts)
-      .filter((materialCost) => {
-        return Number.isFinite(+materialCost.price);
-      })
-      .map((materialCost) => materialCost.price * materialCost.qty)
-      .reduce((m1, m2) => m1 + m2, 0);
+   
 
-    const subContractCost = taskActivities
-      .filter(
-        (taskModel) =>
-          taskModel.modelId == +params.modelId ||
-          (isParentTask ? taskModel.parentId == +params.modelId : false)
-      )
-      .flatMap((taskActivity) => taskActivity.subContracts)
-      .filter(subContract=>subContract.price)
-      .map((subContract) => +subContract.price)
-      .reduce((s1, s2) => s1 + s2, 0);
-
-    const laborCost = taskActivities
-      .filter(
-        (taskModel) =>
-          taskModel.modelId == +params.modelId ||
-          (isParentTask ? taskModel.parentId == +params.modelId : false)
-      )
-      .flatMap((taskActivity) => taskActivity.laborCosts)
-      .map((materialCost) => +materialCost.price * +materialCost.qty)
-      .reduce((m1, m2) => m1 + m2, 0);
-
-    const equipmentCost = taskActivities
-      .filter(
-        (taskModel) =>
-          taskModel.modelId == +params.modelId ||
-          (isParentTask ? taskModel.parentId == +params.modelId : false)
-      )
-      .flatMap((taskActivity) => taskActivity.equipmentCosts)
-      .filter((equipmentCost) => Number.isFinite(+equipmentCost.dailyCost))
-      .map((equipmentCost) => +equipmentCost.dailyCost)
-      .reduce((m1, m2) => m1 + m2, 0);
-
-    setequipmentCostTotal(equipmentCost ? equipmentCost : 0);
-    setmaterialCostTotal(materialCost ? materialCost : 0);
-    setlabortCostTotal(laborCost ? laborCost : 0);
-    setSubContractTotal(subContractCost ? subContractCost : 0);
+    setequipmentCostTotal(equipmentCostTotal ? equipmentCostTotal : 0);
+    setmaterialCostTotal(materialCostTotal ? materialCostTotal : 0);
+    setlabortCostTotal(laborCostTotal ? laborCostTotal : 0);
+    setSubContractTotal(subContractTotal ? subContractTotal : 0);
 
     setTaskChartData({
       labels: ["Equipment Cost", "Material Cost", "Labor Cost","Sub-Contract Cost"],
       datasets: [
         {
-          data: [equipmentCost, materialCost, laborCost,subContractCost],
+          data: [equipmentCostTotal, materialCostTotal, laborCostTotal,subContractTotal],
           backgroundColor: ["#AF4384", "#36A2EB", "#FFCE56","#EFEFEF"],
           hoverBackgroundColor: ["#AF4384", "#36A2EB", "#FFCE56","E6E6E6"],
         },
       ],
     });
   }, [taskActivities]);
+  console.log(taskChartData)
 
   return (
     <>
@@ -186,6 +145,7 @@ export const TaskActivityReport = () => {
                 modalTitle={"Add Labor Cost"}
                 modelId={params.modelId}
                 material = {laborCosts}
+                total = {laborCostTotal}
               />
 
               <SubContractView

@@ -70,13 +70,16 @@ export const EquipmentCostView = ({ modelId, cost,equipmentCost }) => {
           onHide={toggleModal}
           visible={modalToggle}
           modelId={modelId}
+          isMaterial={false}
         />
       )}
 
       <DataTable value={equipmentCost}>
         <Column field="typeOfEquipment" header="Type Of Equipment" />
-        <Column field="quantity" header="No" />
-        <Column field="projectBudjet" header="Daily Cost" />
+        <Column field="quantity" header="Quantity" />
+        <Column field="hourlyRate" header="Hourly Rate" />
+        <Column field="operationHour" header="Operation Hour" />
+        <Column field="utilityFactor" header="Utility Factor" />
         <Column header="Action" body={removeAction} />
       </DataTable>
       <p className="mt-4 font-semibold text-base">Total Amount : {cost}</p>
