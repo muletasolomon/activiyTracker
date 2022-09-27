@@ -21,7 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/" element={<Auth/>}/>
             <Route path="/Home" element={<App />} />
             <Route
-              path="/activityReport/:modelId"
+              path="Home/activityReport/:modelId"
               element={<TaskActivityReport />}
             />
             <Route path="taskList/:modelId" element={<TaskList />} />

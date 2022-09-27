@@ -139,22 +139,21 @@ function App() {
     }).then(pro => {
         console.log(pro);
         let data = [];
-        let dataList = [];
         pro.map(element=>{
           console.log(element)
-          data.push({key:element.project.id,name:element.name,budget:element.project.projectBudget,isActivity:true})
-          let id = element.project.id;
-          element.subActivityList.map(subActi=>{
-            dataList.push({projectId:id,id:subActi.id,name:subActi.name})
-          })
+          data.push({key:element.project.id, data: {name:element.name,budget:element.project.projectBudget,isActivity:true}, children: [...element.subActivityList.map(subactiv=>{
+            console.log('subactiv', subactiv)
+            return({
+              key: subactiv.id,  data: {name:subactiv.name, budget: "",isActivity:false}
+            })
+          })]})
           
         })
         //setProjectsActivity(data);
-        dataSample= [...data];
-        setProjectsActivity([...dataSample])
-        console.log(setProjectsActivity)
+        setProjectsActivity(data )
+        console.log(projectsActivity)
 
-        console.log(dataList)
+        //console.log(dataList)
         //setTree(data)
         return data
     
@@ -245,7 +244,7 @@ function App() {
       </div>
     );
   };
-
+  console.log("antneeh worke+++++++",JSON.stringify(projectsActivity));
   return (
     <>
       <ConfirmDialog />
