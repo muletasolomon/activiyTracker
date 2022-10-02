@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { addKey, removeKey } from "../../store/features/taskActivitySlice";
 import { FormInput } from "../form/FormInput";
+import { useNavigate } from "react-router-dom";
 
 export const AddKeyDialog = ({ onHide, visible }) => {
   const dispatch = useAppDispatch();
@@ -52,6 +53,7 @@ export const AddKeyDialog = ({ onHide, visible }) => {
 export const KeyDialog = ({ onHide, visible }) => {
   const keys = useAppSelector((state) => state.taskActivity.keys);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [toggleAddKey, setToggleAddKey] = useState(false);
 
@@ -66,6 +68,19 @@ export const KeyDialog = ({ onHide, visible }) => {
         className="p-button-outlined border-0"
         onClick={(event) => {
           dispatch(removeKey(keyModel));
+        }}
+        aria-controls="popup_menu"
+        aria-haspopup
+      />
+    );
+  };
+  const reportAction = (keyModel) => {
+    return (
+      <Button
+      icon="pi-angle-double-right"
+        className="p-button-outlined text-500 border-0"
+        onClick={(event) => {
+          navigate(`costCodeReport/`)
         }}
         aria-controls="popup_menu"
         aria-haspopup
@@ -100,6 +115,7 @@ export const KeyDialog = ({ onHide, visible }) => {
       <DataTable value={keys} stripedRows size="small">
         <Column header="Cost Code" field="costCode" />
         <Column header="Activity" field="description" />
+        <Column header="Reporte" body={reportAction} />
         <Column header="Action" body={removeKeyAction} />
       </DataTable>
     </Dialog>

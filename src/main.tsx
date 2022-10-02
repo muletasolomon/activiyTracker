@@ -11,6 +11,7 @@ import "./index.css";
 
 import store, { persistor } from "./store/store";
 import Auth from "./components/Auth";
+import { CostCodeReport } from "./components/report/CostCodeReport";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -23,6 +24,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route
               path="Home/activityReport/:modelId"
               element={<TaskActivityReport />}
+            />
+            <Route
+              path="Home/costCodeReport/"
+              element={<CostCodeReport />}
             />
             <Route path="taskList/:modelId" element={<TaskList />} />
           </Routes>
