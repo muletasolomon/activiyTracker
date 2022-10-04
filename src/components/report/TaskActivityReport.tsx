@@ -72,7 +72,7 @@ export const TaskActivityReport = () => {
         setEqupimentCost(data.equipmentCosts);
         setLaborCosts(data.laborCosts);
         setSubContractCosts(data.subContractCosts);
-        setSelectedTask(true)
+        // setSelectedTask(true)
     }).catch(error => {
         console.log(error);
     });

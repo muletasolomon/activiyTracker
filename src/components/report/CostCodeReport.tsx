@@ -14,6 +14,8 @@ import { CostBudgetReport } from "./summaryReport/CostBudgetReport";
 import { CostSummaryReport } from "./summaryReport/CostSummaryReport";
 import { EarnedValueReport } from "./summaryReport/EarnedValueReport";
 import { PerformanceSummaryReport } from "./summaryReport/PerformanceSummaryReport";
+import { FormInput } from "../form/FormInput";
+import { DefaultBtn } from "../form/DefaultBtn";
 
 export const CostCodeReport = () => {
   const params = useParams();
@@ -36,6 +38,8 @@ export const CostCodeReport = () => {
   const [equpimentCost,setEqupimentCost] = useState();
   const [laborCosts,setLaborCosts] = useState();
   const [subContractCosts,setSubContractCosts] = useState();
+  const [costCode, setCostCode] = useState();
+
   const taskActivities: TaskActivityModel[] = useAppSelector(
     (state) => state.taskActivity.taskActivities
   );
@@ -76,7 +80,7 @@ export const CostCodeReport = () => {
         setEqupimentCost(data.equipmentCosts);
         setLaborCosts(data.laborCosts);
         setSubContractCosts(data.subContractCosts);
-        setSelectedTask(true)
+        // setSelectedTask(true)
     }).catch(error => {
         console.log(error);
     });
@@ -92,10 +96,26 @@ export const CostCodeReport = () => {
     
   console.log(taskChartData)
 
+  const addMaterialCostCallBack = () => {
+    
+    
+
+  };
+
   return (
     <>
       <div className="w-screen w-screen">
         <div className="m-4 p-4">
+        <div className="flex fl justify-content">
+        <FormInput
+          defaultValue={""}
+          labelName={"Cost code"}
+          onUpdate={(val) => setCostCode(val)}
+        />
+
+        <DefaultBtn name={"Filter"} callBack={addMaterialCostCallBack} style={""} />
+
+        </div>
           <p className="text-2xl text-800 font-bold my-4">Report For {title}</p>
           {/* <Divider /> */}
           <div className="grid">
