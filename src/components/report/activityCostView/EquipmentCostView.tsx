@@ -7,6 +7,8 @@ import { removeEquipmentCost } from "../../../store/features/taskActivitySlice";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { DefaultBtn } from "../../form/DefaultBtn";
 import { AddEquipmentCostDialog } from "./AddEquipmentCost";
+import { ConfirmDialog } from "primereact/confirmdialog"; // To use <ConfirmDialog> tag
+import { confirmDialog } from "primereact/confirmdialog"; // To use confirmDialog method
 
 export const EquipmentCostView = ({ modelId, cost,equipmentCost }) => {
   const [modalToggle, setModalToggle] = useState(false);
@@ -23,15 +25,47 @@ export const EquipmentCostView = ({ modelId, cost,equipmentCost }) => {
   const toggleModal = () => {
     setModalToggle(!modalToggle);
   };
+  const removeActivity = (data) => {
+    console.log(`remove rowData ${data.id}`);
+    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/deleteEquipmentCost?equipmentCostId="+data.id;
+    console.log(url)
+    let works = async()=>await fetch(url,{
+        
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }, 
+        mode: 'cors'
+      }).then((response) => {
+        return response.json();                
+    }).then(pro => {
+        
+        return pro
+    
+    }).catch(error => {
+        console.log(error);
+    });
+    works();
+    
+  };
+  const confirmTaskRemoval = (data) => {
+    confirmDialog({
+      message: `Are you sure you want to Remove ?`,
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {removeActivity(data)},
+      reject: () => {},
+    });
+  };
 
   const removeAction = (data) => {
+
     return (
       <Button
         icon="pi pi-trash"
         className="p-button-outlined p-button-sm p-button-danger"
-        onClick={() => {
-          dispatch(removeEquipmentCost({ equipmentCost: data, modelId }));
-        }}
+        onClick={() => confirmTaskRemoval(data)}
       />
     );
   };
@@ -69,6 +103,7 @@ export const EquipmentCostView = ({ modelId, cost,equipmentCost }) => {
         <AddEquipmentCostDialog
           onHide={toggleModal}
           visible={modalToggle}
+          title={""}
           modelId={modelId}
           isMaterial={false}
         />

@@ -14,6 +14,10 @@ import "./index.css";
 import store, { persistor } from "./store/store";
 import Auth from "./components/Auth";
 import { CostCodeReport } from "./components/report/CostCodeReport";
+import { CostBudgetReport } from "./components/report/summaryReport/CostBudgetReport";
+import { CostSummaryReport } from "./components/report/summaryReport/CostSummaryReport";
+import { EarnedValueReport } from "./components/report/summaryReport/EarnedValueReport";
+import { PerformanceSummaryReport } from "./components/report/summaryReport/PerformanceSummaryReport";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -28,8 +32,28 @@ ReactDOM.render(
             element={<TaskActivityReport />}
           />
           <Route
-            path="Home/costCodeReport/"
-            element={<CostCodeReport />}
+            path="Home/costBudgetReport/"
+            element={<CostBudgetReport  
+              title={"Budget Report"}
+            searchFilter = {{}} />}
+          />
+          <Route
+            path="Home/costSummaryReport/"
+            element={<CostSummaryReport  
+              title={"Cost Summary Report"}
+                costCodes = {{}} />}
+          />
+          <Route
+            path="Home/EarnedValue/"
+            element={<EarnedValueReport  
+              title={"Earned Value Report"}
+              costCodes = {{}} />}
+          />
+          <Route
+            path="Home/performanceSummary/"
+            element={<PerformanceSummaryReport  
+              title={"Performance Summary Report"}
+               costCodes = {{}} />}
           />
           <Route path="taskList/:modelId" element={<TaskList />} />
         </Routes>

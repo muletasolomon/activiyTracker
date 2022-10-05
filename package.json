@@ -9,6 +9,7 @@
     "start": "task-creator --plugins=local-dir:plugins"
   },
   "dependencies": {
+    "@mui/material": "^5.10.8",
     "@reduxjs/toolkit": "^1.8.2",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",
@@ -16,7 +17,7 @@
     "@types/react-redux": "^7.1.24",
     "axios": "^0.27.2",
     "chart.js": "^3.8.0",
-    "create-react-app": "^5.0.1",
+    "create-react-app": "^1.2.1",
     "primeicons": "^5.0.0",
     "primereact": "^8.6.0",
     "react": "^18.0.0",

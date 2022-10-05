@@ -76,3 +76,10 @@
     width: 100%;
     flex-wrap: wrap;
 }
+
+
+.form-control-aligment{
+    text-align: justify;
+    align-self: flex-end;
+    margin-left: 1rem;
+}

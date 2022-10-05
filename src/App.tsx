@@ -53,6 +53,22 @@ function App() {
     toggleModal();
   };
 
+  const addCostBudgetReport = () => {
+    navigate(`costBudgetReport/`)
+  };
+
+  const addCostSummaryReport = () => {
+    navigate(`costSummaryReport/`)
+  };
+
+  const addEarnedValue = () => {
+    navigate(`EarnedValue/`)
+  };
+
+  const addPerformanceSummary = () => {
+    navigate(`performanceSummary/`)
+  };
+
   useEffect(() => {
     console.log("works")
     workList();
@@ -73,7 +89,7 @@ function App() {
 
   const removeActivity = () => {
     console.log(`remove rowData ${taskParentNode}`);
-    appDispatch(removeTask(taskParentNode));
+    
   };
 
   const confirmTaskRemoval = () => {
@@ -244,7 +260,6 @@ function App() {
       </div>
     );
   };
-  console.log("antneeh worke+++++++",JSON.stringify(projectsActivity));
   return (
     <>
       <ConfirmDialog />
@@ -293,6 +308,38 @@ function App() {
                   icon="pi pi-user"
                   className="p-button-outlined p-button-success p-button-sm"
                   onClick={() => addTaskOnClick()}
+                  aria-controls="popup_menu"
+                  aria-haspopup
+                />
+                <Button
+                  label="Cost Budget Report"
+                  icon="pi pi-user"
+                  className="p-button-outlined p-button-success p-button-sm"
+                  onClick={() => addCostBudgetReport()}
+                  aria-controls="popup_menu"
+                  aria-haspopup
+                />
+                <Button
+                  label="Cost Sumary Report"
+                  icon="pi pi-user"
+                  className="p-button-outlined p-button-success p-button-sm"
+                  onClick={() => addCostSummaryReport()}
+                  aria-controls="popup_menu"
+                  aria-haspopup
+                />
+                <Button
+                  label="Earned Value Report"
+                  icon="pi pi-user"
+                  className="p-button-outlined p-button-success p-button-sm"
+                  onClick={() => addEarnedValue()}
+                  aria-controls="popup_menu"
+                  aria-haspopup
+                />
+                <Button
+                  label="Performance Summary"
+                  icon="pi pi-user"
+                  className="p-button-outlined p-button-success p-button-sm"
+                  onClick={() => addPerformanceSummary()}
                   aria-controls="popup_menu"
                   aria-haspopup
                 />

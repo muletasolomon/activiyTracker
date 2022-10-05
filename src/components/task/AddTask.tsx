@@ -31,17 +31,35 @@ export const AddTaskDialog = ({
   );
 
   const addTaskOnClick = () => {
-    let formData = {
-    "name":name
-    ,"budget":budget 
-  }
-    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/registerActivity"; 
-    axios.post(url,formData,{
-      headers:{"Content-Type" : "application/json"}})
-    .then(res => {
-       onHide()
-    })
-    .catch(err => console.log(err));
+
+    if(!isActivity){
+      let request = {
+        "name":name
+        ,"budget":budget 
+      }
+      
+      let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/registrationResource/registerActivity",{
+          
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }, 
+          mode: 'cors',
+          body:JSON.stringify(request)
+        }).then((response) => {
+          return response.json();                
+      }).then(pro => {
+        
+           onHide()
+          return pro
+      
+      }).catch(error => {
+          console.log(error);
+      });
+      data();
+    }
+    
   };
 
   return (

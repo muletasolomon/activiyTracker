@@ -27,14 +27,38 @@ export const SubContractView = ({ modelId, cost,subContaract }) => {
     setModalToggle(!modalToggle);
   };
 
+  const removeActivity = (data) => {
+    console.log(`remove rowData ${data.id}`);
+    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/deleteSubcontractCost?subcontractCostId="+data.id;
+    console.log(url)
+    let works = async()=>await fetch(url,{
+        
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }, 
+        mode: 'cors'
+      }).then((response) => {
+        return response.json();                
+    }).then(pro => {
+        
+        return pro
+    
+    }).catch(error => {
+        console.log(error);
+    });
+    works();
+    
+  };
+
+
   const removeAction = (data) => {
     return (
       <Button
         icon="pi pi-trash"
         className="p-button-outlined p-button-sm p-button-danger"
-        onClick={() => {
-          dispatch(removeSubContract({ subContract: data, modelId }));
-        }}
+        onClick={() => removeActivity(data)}
       />
     );
   };

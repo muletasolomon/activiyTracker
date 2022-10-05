@@ -99,19 +99,37 @@ export const MaterialCostView = ({
   const AddMaterialCostOnClick = () => {
     toggleModal();
   };
+  const removeActivity = (data) => {
+    console.log(`remove rowData ${data.id}`);
+    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/deleteMaterialCost?materialCostId="+data.id;
+    console.log(url)
+    let works = async()=>await fetch(url,{
+        
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }, 
+        mode: 'cors'
+      }).then((response) => {
+        return response.json();                
+    }).then(pro => {
+        
+        return pro
+    
+    }).catch(error => {
+        console.log(error);
+    });
+    works();
+    
+  };
 
   const removeAction = (data) => {
     return (
       <Button
         icon="pi pi-trash"
         className="p-button-outlined p-button-sm p-button-danger"
-        onClick={() => {
-          if (isMaterial) {
-            dispatch(removeMaterialCost({materialCost:data,modelId}));
-          } else {
-            dispatch(removeLaborCost({laborCost:data,modelId}));
-          }
-        }}
+        onClick={() => removeActivity(data)}
       />
     );
   };

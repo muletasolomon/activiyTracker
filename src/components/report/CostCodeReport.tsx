@@ -16,6 +16,11 @@ import { EarnedValueReport } from "./summaryReport/EarnedValueReport";
 import { PerformanceSummaryReport } from "./summaryReport/PerformanceSummaryReport";
 import { FormInput } from "../form/FormInput";
 import { DefaultBtn } from "../form/DefaultBtn";
+import {
+  TextField,
+  Grid,
+  FormControl
+} from "@mui/material"; 
 
 export const CostCodeReport = () => {
   const params = useParams();
@@ -39,6 +44,24 @@ export const CostCodeReport = () => {
   const [laborCosts,setLaborCosts] = useState();
   const [subContractCosts,setSubContractCosts] = useState();
   const [costCode, setCostCode] = useState();
+  const [searchKey, setSearchKey] = useState();
+  const [ keyFilter,setKeyFilter] = useState({});
+  const [show,isShow] = useState(false);
+  const [searchForm, setForm] = React.useState({
+    searchParameter: "",
+    driverStatus: 0,
+    startDate: "",
+    endDate: "",
+    start: null,
+    end: null,
+  });
+  const { startDate, endDate } = searchForm;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...searchForm, [name]: value });
+    console.log(searchForm);
+  };
+
 
   const taskActivities: TaskActivityModel[] = useAppSelector(
     (state) => state.taskActivity.taskActivities
@@ -97,33 +120,76 @@ export const CostCodeReport = () => {
   console.log(taskChartData)
 
   const addMaterialCostCallBack = () => {
-    
-    
-
-  };
+    console.log(searchKey+" "+costCode+" "+searchForm.startDate+" "+searchForm.endDate)
+    setKeyFilter({searchKey:searchKey,costCode:costCode,startDate:startDate,endDate:endDate})
+    if(!show){
+     isShow(true)
+    }else{
+      isShow(false)
+      addMaterialCostCallBack();
+    }
+  }
 
   return (
     <>
       <div className="w-screen w-screen">
         <div className="m-4 p-4">
         <div className="flex fl justify-content">
-        <FormInput
-          defaultValue={""}
-          labelName={"Cost code"}
-          onUpdate={(val) => setCostCode(val)}
-        />
+          <FormInput
+            defaultValue={""}
+            labelName={"Search"}
+            onUpdate={(val) => setSearchKey(val)}
+          />
+          <FormInput
+            defaultValue={""}
+            labelName={"Cost code"}
+            onUpdate={(val) => setCostCode(val)}
+          />
 
-        <DefaultBtn name={"Filter"} callBack={addMaterialCostCallBack} style={""} />
+          <Grid item xs="auto" className="form-control-aligment">
+            <FormControl>
+              <TextField
+                id="date"
+                label="Start Date"
+                type="date"
+                value={startDate}
+                name="startDate"
+                onChange={handleChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs="auto" className="form-control-aligment">
+            <FormControl>
+              <TextField
+                id="date"
+                label="End Date"
+                type="date"
+                value={endDate}
+                name="endDate"
+                onChange={handleChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </FormControl>
+          </Grid>
+
 
         </div>
+        <DefaultBtn name={"Filter"} callBack={addMaterialCostCallBack} style={"form-control-aligment"} />
+
           <p className="text-2xl text-800 font-bold my-4">Report For {title}</p>
           {/* <Divider /> */}
           <div className="grid">
-            <div className="col-7">
+          {(show &&(<div className="col-7">
+              
               <Divider />
               <CostBudgetReport
                 title={"Budget Report"}
-                costCode = {materialCost}
+                searchFilter = {keyFilter}
               />
               <Divider />
               <CostSummaryReport
@@ -140,7 +206,8 @@ export const CostCodeReport = () => {
                title={"Performance Summary Report"}
                costCode = {materialCost}
               />
-            </div>
+            </div>))}
+            
 
             
           </div>
