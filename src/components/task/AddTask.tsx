@@ -1,7 +1,7 @@
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ControlledInput } from "../form/ControlledInput";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { addTask } from "../../store/features/taskActivitySlice";
@@ -13,6 +13,7 @@ export const AddTaskDialog = ({
   visible,
   isActivity,
   taskParentId,
+  keys
 }) => {
   const [projectId, setProjectId] = useState(0);
   const [key, setKey] = useState("");
@@ -21,7 +22,7 @@ export const AddTaskDialog = ({
 
   const dispatch = useAppDispatch();
 
-  const keys = useAppSelector((state) =>
+  const keyx = useAppSelector((state) =>
     state.taskActivity.keys.map((data) => {
       return {
         label: data.costCode.concat(" - ").concat(data.description),
@@ -29,6 +30,38 @@ export const AddTaskDialog = ({
       };
     })
   );
+  const codeList = () =>{
+   
+     fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",{
+        
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }, 
+        mode: 'cors',
+      }).then((response) => {
+        return response.json();                
+    }).then(pro => {
+        let res = [];
+        pro.map(element =>{
+          res.push({costCode:element.code,label:element.code.concat(" - ").concat(element.descirption)})
+        })
+        console.log(res);
+        
+        return pro;
+    
+    }).catch(error => {
+        console.log(error);
+    });
+  
+   // const data = await res.json();
+    //console.log(data);
+  }
+
+  useEffect(() => {
+    //codeList()
+  }, [keys]);
 
   const addTaskOnClick = () => {
 

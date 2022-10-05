@@ -50,15 +50,14 @@ export const AddKeyDialog = ({ onHide, visible }) => {
   );
 };
 
-export const KeyDialog = ({ onHide, visible }) => {
-  const keys = useAppSelector((state) => state.taskActivity.keys);
+export const KeyDialog = ({ onHide, visible,keys }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [toggleAddKey, setToggleAddKey] = useState(false);
 
+  
   useEffect(() => {
-    localStorage.setItem("cost-codes", JSON.stringify(keys));
   }, [keys]);
 
   const removeKeyAction = (keyModel) => {
@@ -112,10 +111,10 @@ export const KeyDialog = ({ onHide, visible }) => {
         aria-controls="popup_menu"
         aria-haspopup
       />
+      {console.log(keys)}
       <DataTable value={keys} stripedRows size="small">
         <Column header="Cost Code" field="costCode" />
         <Column header="Activity" field="description" />
-        <Column header="Reporte" body={reportAction} />
         <Column header="Action" body={removeKeyAction} />
       </DataTable>
     </Dialog>

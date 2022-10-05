@@ -28,6 +28,7 @@ function App() {
   const [nodes, setNodes] = useState({ root: [] });
 
   const [parentTasks, setParentTasks] = useState([]);
+  const [codes, setCodes] = useState([]);
   const [tree,setTree] = useState([])
   const menu = useRef(null);
   const subTaskMenu = useRef(null);
@@ -37,6 +38,7 @@ function App() {
   const [isActivity, setIsActivity] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const [toggleKeyDialog, setToggleKeyDialog] = useState(false);
+  const [keys,setKeys] = useState([]);
   
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -83,8 +85,32 @@ function App() {
   }, [taskActivities]);
 
   const addSubActivity = () => {
-    setIsActivity(true);
-    toggleModal();
+    console.log("subactivity")
+    fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",{
+        
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }, 
+        mode: 'cors',
+      }).then((response) => {
+        return response.json();                
+    }).then(pro => {
+        let res = [];
+        pro.map(element =>{
+          res.push({costCode:element.code,label:element.code.concat(" - ").concat(element.descirption)})
+        })
+        console.log(res);
+        setKeys(res)
+        setIsActivity(true);
+        toggleModal();
+        return pro;
+    
+    }).catch(error => {
+        console.log(error);
+    });
+    
   };
 
   const removeActivity = () => {
@@ -183,6 +209,38 @@ function App() {
     //console.log(data);
 }
 
+const codeList = (toggleKeyDialog) =>{
+   
+  let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",{
+      
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }, 
+      mode: 'cors',
+    }).then((response) => {
+      return response.json();                
+  }).then(pro => {
+      let res = [];
+      pro.map(element =>{
+        res.push({costCode:element.code,description:element.descirption})
+      })
+      setToggleKeyDialog(toggleKeyDialog)
+      console.log(res);
+      setCodes(res)
+      return pro;
+  
+  }).catch(error => {
+      console.log(error);
+  });
+  data();
+
+ // const data = await res.json();
+  //console.log(data);
+}
+
+
 
   const taskNameView = (taskRowData: TaskActivityModel) => {
     return (
@@ -272,6 +330,7 @@ function App() {
               visible={addTaskToggle}
               isActivity={isActivity}
               taskParentId={taskParentNode}
+              keys = {keys}
             />
           )}
           <Menu
@@ -293,6 +352,7 @@ function App() {
           {toggleKeyDialog && (
             <KeyDialog
               visible={toggleKeyDialog}
+              keys = {codes}
               onHide={() => setToggleKeyDialog(!toggleKeyDialog)}
             />
           )}
@@ -348,7 +408,7 @@ function App() {
                   icon="pi pi-key"
                   className="p-button-outlined p-button-sm p-button-secondary"
                   label="Cost Code"
-                  onClick={() => setToggleKeyDialog(!toggleKeyDialog)}
+                  onClick={() => codeList(!toggleKeyDialog)}
                 />
               </div>
               <div>
