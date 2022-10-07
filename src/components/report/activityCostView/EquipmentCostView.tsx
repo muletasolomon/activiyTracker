@@ -40,7 +40,7 @@ export const EquipmentCostView = ({ modelId, cost,equipmentCost }) => {
       }).then((response) => {
         return response.json();                
     }).then(pro => {
-        
+      window.location.reload();
         return pro
     
     }).catch(error => {

@@ -48,7 +48,7 @@ export default function() {
            
           </div>
           <div className="d-grid gap-2 mt-3 login-button-holder">
-            <button  className="btn btn-primary login100-form-btn" onClick={() => addMaterialCostCallBack()}>
+            <button  type="button" className="btn btn-primary login100-form-btn" onClick={() => addMaterialCostCallBack()}>
               Login
             </button>
           </div>

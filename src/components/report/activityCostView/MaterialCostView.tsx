@@ -114,7 +114,7 @@ export const MaterialCostView = ({
       }).then((response) => {
         return response.json();                
     }).then(pro => {
-        
+      window.location.reload();
         return pro
     
     }).catch(error => {

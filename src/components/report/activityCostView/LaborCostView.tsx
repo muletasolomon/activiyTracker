@@ -115,7 +115,7 @@ export const LaborCostView = ({
       }).then((response) => {
         return response.json();                
     }).then(pro => {
-        
+      window.location.reload();
         return pro
     
     }).catch(error => {

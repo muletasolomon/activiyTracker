@@ -42,7 +42,7 @@ export const SubContractView = ({ modelId, cost,subContaract }) => {
       }).then((response) => {
         return response.json();                
     }).then(pro => {
-        
+      window.location.reload();
         return pro
     
     }).catch(error => {

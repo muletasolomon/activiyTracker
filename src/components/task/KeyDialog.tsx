@@ -15,6 +15,35 @@ export const AddKeyDialog = ({ onHide, visible }) => {
   const [key, setKey] = useState();
   const [description, setDiscription] = useState();
 
+  const uploadToServer = ()=>{
+    let request = {
+      "id":0,
+      "code":key,
+      "descirption":description,
+      "updatedOn":"2022-10-06T06:01:21.260Z"
+    }
+    let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/registrationResource/registerCostCode",{
+          
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }, 
+          mode: 'cors',
+          body:JSON.stringify(request)
+        }).then((response) => {
+          return response.json();                
+      }).then(pro => {
+        onHide();
+        window.location.reload();
+          return pro
+      
+      }).catch(error => {
+          console.log(error);
+      });
+      data();
+  }
+
   return (
     <Dialog
       header="Add Key"
@@ -40,8 +69,7 @@ export const AddKeyDialog = ({ onHide, visible }) => {
         label="Add Cost Code"
         className="p-button-success p-button-outlined my-2 p-button-sm"
         onClick={(event) => {
-          dispatch(addKey({ costCode: key, description: description }));
-          onHide();
+          uploadToServer();
         }}
         aria-controls="popup_menu"
         aria-haspopup

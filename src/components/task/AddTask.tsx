@@ -7,19 +7,24 @@ import { useAppDispatch, useAppSelector } from "../../store/store";
 import { addTask } from "../../store/features/taskActivitySlice";
 import { Divider } from "primereact/divider";
 import axios from "axios";
+import { FormInput } from "../form/FormInput";
 
 export const AddTaskDialog = ({
   onHide,
   visible,
   isActivity,
   taskParentId,
-  keys
+  keys,
+  activityId
 }) => {
   const [projectId, setProjectId] = useState(0);
   const [key, setKey] = useState("");
   const [name, setName] = useState("");
   const [budget,setBudget]=useState();
-
+  const [unitCost,setUnitCost]=useState();
+  const [costCode,setCostCode]=useState();
+  const [activity,setActivity]=useState();
+  const [projectBudget,setProjectBudget]=useState();
   const dispatch = useAppDispatch();
 
   const keyx = useAppSelector((state) =>
@@ -65,6 +70,8 @@ export const AddTaskDialog = ({
 
   const addTaskOnClick = () => {
 
+    console.log("activity")
+
     if(!isActivity){
       let request = {
         "name":name
@@ -83,7 +90,44 @@ export const AddTaskDialog = ({
         }).then((response) => {
           return response.json();                
       }).then(pro => {
-        
+        window.location.reload();
+           onHide()
+          return pro
+      
+      }).catch(error => {
+          console.log(error);
+      });
+      data();
+    }
+    
+  };
+
+  const addSubTaskOnClick= () => {
+
+    if(isActivity){
+      console.log("use")
+
+      let request = {
+        "name":name,
+        "costCode":costCode,
+         "unitCost":unitCost,
+        "activity":activityId,
+        "projectBudget":projectBudget
+      }
+      
+      let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/registrationResource/registerSubActivity",{
+          
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }, 
+          mode: 'cors',
+          body:JSON.stringify(request)
+        }).then((response) => {
+          return response.json();                
+      }).then(pro => {
+        window.location.reload();
            onHide()
           return pro
       
@@ -129,6 +173,8 @@ export const AddTaskDialog = ({
 
         {isActivity && (
           <div className="field ml-4">
+
+           
             <label className="">Cost Code</label>
 
             <Dropdown
@@ -137,10 +183,24 @@ export const AddTaskDialog = ({
               filter
               onChange={(e) => {
                 console.log(e.value);
-                setKey(e.value);
+                setCostCode(e.value.id);
               }}
             />
-
+           <FormInput
+              defaultValue={""}
+              labelName={"Name"}
+              onUpdate={(val) => setName(val)}
+            />
+            <FormInput
+              defaultValue={""}
+              labelName={"Unit cost"}
+              onUpdate={(val) => setUnitCost(val)}
+            />
+            <FormInput
+              defaultValue={""}
+              labelName={"Project Budget"}
+              onUpdate={(val) => setProjectBudget(val)}
+            />
             {/* <ControlledInput onUpdate={(val) => setKey(val)} type={"text"} defaultValue={""}/> */}
           </div>
         )}
@@ -151,7 +211,7 @@ export const AddTaskDialog = ({
           label={`${isActivity ? "Add Sub-Activity" : "Add Activity"}`}
           icon="pi pi-user"
           className="p-button-success p-button-outlined mb-2 ml-4"
-          onClick={() => addTaskOnClick()}
+          onClick={() => !isActivity ?addTaskOnClick():addSubTaskOnClick()}
           aria-controls="popup_menu"
           aria-haspopup
         />

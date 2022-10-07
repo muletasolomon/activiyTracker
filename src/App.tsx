@@ -36,6 +36,7 @@ function App() {
   const [addTaskToggle, setAddTaskToggle] = useState(false);
   const [taskParentNode, setTaskParentNode] = useState(0);
   const [isActivity, setIsActivity] = useState(false);
+  const [activityId, setactivityId] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const [toggleKeyDialog, setToggleKeyDialog] = useState(false);
   const [keys,setKeys] = useState([]);
@@ -99,7 +100,7 @@ function App() {
     }).then(pro => {
         let res = [];
         pro.map(element =>{
-          res.push({costCode:element.code,label:element.code.concat(" - ").concat(element.descirption)})
+          res.push({id:element.id,costCode:element.code,label:element.code.concat(" - ").concat(element.descirption)})
         })
         console.log(res);
         setKeys(res)
@@ -259,6 +260,7 @@ const codeList = (toggleKeyDialog) =>{
           const { data } = taskActivityRowData;
           console.log(taskActivityRowData);
           setTaskParentNode(taskActivityRowData.key);
+          setactivityId(taskActivityRowData.key)
           setTaskTitle(taskActivityRowData.name);
           if (!taskActivityRowData.isActivity) {
             menu.current.toggle(event);
@@ -329,6 +331,7 @@ const codeList = (toggleKeyDialog) =>{
               onHide={toggleModal}
               visible={addTaskToggle}
               isActivity={isActivity}
+              activityId = {activityId}
               taskParentId={taskParentNode}
               keys = {keys}
             />
