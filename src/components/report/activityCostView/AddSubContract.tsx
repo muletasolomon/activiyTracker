@@ -11,7 +11,6 @@ export const AddSubContractDialog = ({
   visible,
   modelId,
   title,
-  isMaterial,
 }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);

@@ -95,6 +95,7 @@ export const SubContractView = ({ modelId, cost,subContaract }) => {
 
       {modalToggle && (
         <AddSubContractDialog
+            title={''}
           onHide={toggleModal}
           visible={modalToggle}
           modelId={modelId}

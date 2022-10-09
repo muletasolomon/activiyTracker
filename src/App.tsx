@@ -262,7 +262,7 @@ const codeList = (toggleKeyDialog) =>{
           setTaskParentNode(taskActivityRowData.key);
           setactivityId(taskActivityRowData.key)
           setTaskTitle(taskActivityRowData.name);
-          if (!taskActivityRowData.isActivity) {
+          if (taskActivityRowData.data.isActivity) {
             menu.current.toggle(event);
           } else {
             subTaskMenu.current.toggle(event);
