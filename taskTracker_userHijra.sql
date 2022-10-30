@@ -1,0 +1,6 @@
+INSERT INTO taskTracker.userHijra (id, username, password, person, active, userGroup, fullname, branch) VALUES (1, 'admin', '$2a$10$FNyFvkzEM7FTsyeQZwkwIuZjA3dsRdFH.WnKTbx9P6mSZHUOptmSe', 1, 1, 1, null, null);
+INSERT INTO taskTracker.userHijra (id, username, password, person, active, userGroup, fullname, branch) VALUES (2, 'maker', '$2a$10$FNyFvkzEM7FTsyeQZwkwIuZjA3dsRdFH.WnKTbx9P6mSZHUOptmSe', 1, 1, 1, null, null);
+INSERT INTO taskTracker.userHijra (id, username, password, person, active, userGroup, fullname, branch) VALUES (3, 'checker', '$2a$10$FNyFvkzEM7FTsyeQZwkwIuZjA3dsRdFH.WnKTbx9P6mSZHUOptmSe', 1, 1, 1, null, null);
+INSERT INTO taskTracker.userHijra (id, username, password, person, active, userGroup, fullname, branch) VALUES (4, 'dasd', '$2a$10$bZMsjbFK.RtUPjqLi4oUvuuu5eVCYzT7iENGXIeVVS3sLX53vvJCu', 1, 1, 911111111, 'asds dsdd sds', '2');
+INSERT INTO taskTracker.userHijra (id, username, password, person, active, userGroup, fullname, branch) VALUES (13, 'ususiii', '$2a$10$c11CklbadWZKGzzQWLXW0O5mrfuF8SDnkysgMuzovfscK0.lOCI06', 1, 1, 911272919, 'iiidsad isiadisu isi', '1');
+INSERT INTO taskTracker.userHijra (id, username, password, person, active, userGroup, fullname, branch) VALUES (16, 'ususiiiaaaa', '$2a$10$oasDxTfSpD.sFR9MNHxKbeFjZJuL0FaZrPmLbTf1oTwQG6aS6qfu2', 1, 1, 911111111111, 'sd i i', '1');

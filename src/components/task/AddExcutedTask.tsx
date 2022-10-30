@@ -8,8 +8,9 @@ import { addTask } from "../../store/features/taskActivitySlice";
 import { Divider } from "primereact/divider";
 import axios from "axios";
 import { FormInput } from "../form/FormInput";
+import {FormControl, Grid, TextField} from "@mui/material";
 
-export const AddTaskDialog = ({
+export const AddExcutedTask = ({
   onHide,
   visible,
   isActivity,
@@ -68,39 +69,7 @@ export const AddTaskDialog = ({
     //codeList()
   }, [keys]);
 
-  const addTaskOnClick = () => {
 
-    console.log("activity")
-
-    if(!isActivity){
-      let request = {
-        "name":name
-        ,"budget":budget 
-      }
-      
-      let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/registrationResource/registerActivity",{
-          
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          }, 
-          mode: 'cors',
-          body:JSON.stringify(request)
-        }).then((response) => {
-          return response.json();                
-      }).then(pro => {
-        window.location.reload();
-           onHide()
-          return pro
-      
-      }).catch(error => {
-          console.log(error);
-      });
-      data();
-    }
-    
-  };
 
   const addSubTaskOnClick= () => {
 
@@ -138,10 +107,56 @@ export const AddTaskDialog = ({
     }
     
   };
+    const [searchForm, setForm] = React.useState({
+        date: ""
+    });
+    const { date } = searchForm;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm({ ...searchForm, [name]: value });
+        console.log(searchForm);
+    };
+    const addTaskOnClick = () => {
 
-  return (
+        console.log("activity")
+
+        if(isActivity){
+            let request = {
+                "id":0,
+                "name":name,
+                "subActivity":taskParentId,
+                "executedQuantity":unitCost,
+                "date":searchForm.date+"T11:23:03.107Z"
+            }
+
+            let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/registrationResource/registerExecutedQuantity",{
+
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors',
+                body:JSON.stringify(request)
+            }).then((response) => {
+                return response.json();
+            }).then(pro => {
+                window.location.reload();
+                 onHide()
+                return pro
+
+            }).catch(error => {
+                console.log(error);
+            });
+            data();
+        }
+
+    };
+
+
+    return (
     <Dialog
-      header = {`${isActivity ? "Add Task/Sub-Activity" : "Add Task/Activity"}`}
+      header="Add Excuted Quantity"
       visible={visible}
       style={{ width: "40vw" }}
       onHide={() => onHide()}
@@ -174,19 +189,6 @@ export const AddTaskDialog = ({
         {isActivity && (
           <div className="field ml-4">
 
-           
-            <label className="">Cost Code</label>
-
-            <Dropdown
-              value={key}
-              options={keys}
-              filter
-              onChange={(e) => {
-                console.log(e.value.label);
-                setKey(e.value)
-                setCostCode(e.value.id);
-              }}
-            />
            <FormInput
               defaultValue={""}
               labelName={"Name"}
@@ -194,14 +196,24 @@ export const AddTaskDialog = ({
             />
             <FormInput
               defaultValue={""}
-              labelName={"Unit cost"}
+              labelName={"Excuted Quantity"}
               onUpdate={(val) => setUnitCost(val)}
             />
-            <FormInput
-              defaultValue={""}
-              labelName={"Project Budget"}
-              onUpdate={(val) => setProjectBudget(val)}
-            />
+              <Grid item xs="auto" className="form-control-aligment mt-4">
+                  <FormControl>
+                      <TextField
+                          id="date"
+                          label="Date"
+                          type="date"
+                          value={date}
+                          name="date"
+                          onChange={handleChange}
+                          InputLabelProps={{
+                              shrink: true,
+                          }}
+                      />
+                  </FormControl>
+              </Grid>
             {/* <ControlledInput onUpdate={(val) => setKey(val)} type={"text"} defaultValue={""}/> */}
           </div>
         )}
@@ -209,10 +221,10 @@ export const AddTaskDialog = ({
         <Divider />
 
         <Button
-          label={`${isActivity ? "Add Sub-Activity" : "Add Activity"}`}
+          label={`${"Add Excuted Quantity"}`}
           icon="pi pi-user"
           className="p-button-success p-button-outlined mb-2 ml-4"
-          onClick={() => !isActivity ?addTaskOnClick():addSubTaskOnClick()}
+          onClick={() => addTaskOnClick()}
           aria-controls="popup_menu"
           aria-haspopup
         />

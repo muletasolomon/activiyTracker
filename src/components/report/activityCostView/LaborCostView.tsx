@@ -102,7 +102,7 @@ export const LaborCostView = ({
 
   const removeActivity = (data) => {
     console.log(`remove rowData ${data.id}`);
-    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/deleteLaborCost?laborCostId="+data.id;
+    const url = "http://172.16.0.56:8080/testApi/rest/registrationResource/deleteLaborCost?laborCostId="+data.id;
     console.log(url)
     let works = async()=>await fetch(url,{
         
@@ -170,7 +170,9 @@ export const LaborCostView = ({
         <Column header="UF" field="utilityFactor" />
         <Column header="MH" field="morningHour" />
         <Column header="OT" field="overTime" />
-        
+        <Column header="Date" field="updatedOn" />
+
+
         <Column header="Action" body={removeAction} />
       </DataTable>
 

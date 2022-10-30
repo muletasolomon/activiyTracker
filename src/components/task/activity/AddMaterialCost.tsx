@@ -30,7 +30,7 @@ export const AddMaterialCost = ({
     ,"quantity":qty
     ,"executedQuantity":excqty 
     ,"date":date+"T01:36:08.775Z"}
-    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/registerMaterialCost"; 
+    const url = "http://172.16.0.56:8080/testApi/rest/registrationResource/registerMaterialCost"; 
     axios.post(url,formData,{
       headers:{"Content-Type" : "application/json"}})
     .then(res => {
@@ -67,11 +67,11 @@ export const AddMaterialCost = ({
           labelName={"Qty"}
           onUpdate={(val) => setQty(val)}
         />
-        <FormInput
-          defaultValue={""}
-          labelName={"Executed Quantity"}
-          onUpdate={(val) => setExcQty(val)}
-        />
+        {/*<FormInput*/}
+          {/*defaultValue={""}*/}
+          {/*labelName={"Executed Quantity"}*/}
+          {/*onUpdate={(val) => setExcQty(val)}*/}
+        {/*/>*/}
         <div className="flex flex-column">
           <label className="py-2 text-base font-bold">Date</label>
 

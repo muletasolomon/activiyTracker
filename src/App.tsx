@@ -18,7 +18,8 @@ import { TaskActivityModel } from "./model/TaskActivityModel";
 import { removeTask, updateTask } from "./store/features/taskActivitySlice";
 import { useAppDispatch, useAppSelector } from "./store/store";
 import { ConfirmDialog } from "primereact/confirmdialog"; // To use <ConfirmDialog> tag
-import { confirmDialog } from "primereact/confirmdialog"; // To use confirmDialog method
+import { confirmDialog } from "primereact/confirmdialog";
+import {AddExcutedTask} from "./components/task/AddExcutedTask"; // To use confirmDialog method
 
 function App() {
   const taskActivities: TaskActivityModel[] = useAppSelector(
@@ -34,6 +35,7 @@ function App() {
   const subTaskMenu = useRef(null);
 
   const [addTaskToggle, setAddTaskToggle] = useState(false);
+  const [addExcuted,setAddExcuted] = useState(false);
   const [taskParentNode, setTaskParentNode] = useState(0);
   const [isActivity, setIsActivity] = useState(false);
   const [activityId, setactivityId] = useState(false);
@@ -48,7 +50,13 @@ function App() {
 
   const toggleModal = () => {
     setAddTaskToggle(!addTaskToggle);
+      console.log(addExcuted)
+
   };
+    const toggleModalExcuted = () => {
+        setAddExcuted(!addExcuted);
+        console.log(addExcuted)
+    };
 
   const addTaskOnClick = () => {
     setIsActivity(false);
@@ -87,8 +95,7 @@ function App() {
 
   const addSubActivity = () => {
     console.log("subactivity")
-    fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",{
-        
+    fetch("http://172.16.0.56:8080/testApi/rest/subactivities/getCostCodeList",{
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -116,8 +123,51 @@ function App() {
 
   const removeActivity = () => {
     console.log(`remove rowData ${taskParentNode}`);
+
+          let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/registrationResource/deleteActivity?activityId="+taskParentNode,{
+
+              method: 'POST',
+              headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json'
+              },
+              mode: 'cors'
+          }).then((response) => {
+              return response.json();
+          }).then(pro => {
+              window.location.reload();
+              return pro
+
+          }).catch(error => {
+              console.log(error);
+          });
+      data();
     
   };
+
+    const removeSubActivity = () => {
+        console.log(`remove rowData ${taskParentNode}`);
+
+        let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/registrationResource/deleteSubActivity?activityId="+taskParentNode,{
+
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            mode: 'cors'
+        }).then((response) => {
+            return response.json();
+        }).then(pro => {
+            window.location.reload();
+            return pro
+
+        }).catch(error => {
+            console.log(error);
+        });
+        data();
+
+    };
 
   const confirmTaskRemoval = () => {
     confirmDialog({
@@ -128,6 +178,16 @@ function App() {
       reject: () => {},
     });
   };
+
+    const confirmTaskRemovalSub = () => {
+        confirmDialog({
+            message: `Are you sure you want to Remove ?`,
+            header: "Confirmation",
+            icon: "pi pi-exclamation-triangle",
+            accept: () => removeSubActivity(),
+            reject: () => {},
+        });
+    };
 
   const userActionItems = [
     {
@@ -142,12 +202,12 @@ function App() {
         confirmTaskRemoval();
       },
     },
-    {
-      label: "View Report",
-      icon: "pi pi-chart-pie",
-      command: () =>
-        navigate(`activityReport/${taskParentNode}?name=${taskTitle}`),
-    },
+    // {
+    //   label: "View Report",
+    //   icon: "pi pi-chart-pie",
+    //   command: () =>
+    //     navigate(`activityReport/${taskParentNode}?name=${taskTitle}`),
+    // },
   ];
 
   const subTaskUserActionItems = [
@@ -157,11 +217,17 @@ function App() {
       command: () =>
         navigate(`activityReport/${taskParentNode}?name=${taskTitle}`),
     },
+      {
+          label: "Excuted Quntity",
+          icon: "pi pi-chart-pie",
+          command: () =>{toggleModalExcuted()
+              },
+      },
     {
       label: "Remove Sub Activity",
       icon: "pi pi-trash",
       command: () => {
-        confirmTaskRemoval();
+          confirmTaskRemovalSub();
       },
     },
   ];
@@ -169,7 +235,7 @@ function App() {
   const workList = () =>{
     console.log("ty");
     let dataSample = []
-    let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getActivityList?projectId=1",{
+    let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/subactivities/getActivityList?projectId=1",{
         
         method: 'GET',
         headers: {
@@ -184,10 +250,10 @@ function App() {
         let data = [];
         pro.map(element=>{
           console.log(element)
-          data.push({key:element.project.id, data: {name:element.name,budget:element.project.projectBudget,isActivity:true}, children: [...element.subActivityList.map(subactiv=>{
+          data.push({key:element.id, data: {name:element.name,budget:element.description,isActivity:true}, children: [...element.subActivityList.map(subactiv=>{
             console.log('subactiv', subactiv)
             return({
-              key: subactiv.id,  data: {name:subactiv.name, budget: "",isActivity:false}
+              key: subactiv.id,  data: {name:subactiv.name, budget: subactiv.projectBudjet,isActivity:false}
             })
           })]})
           
@@ -212,7 +278,7 @@ function App() {
 
 const codeList = (toggleKeyDialog) =>{
    
-  let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",{
+  let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/subactivities/getCostCodeList",{
       
       method: 'GET',
       headers: {
@@ -261,7 +327,7 @@ const codeList = (toggleKeyDialog) =>{
           console.log(taskActivityRowData);
           setTaskParentNode(taskActivityRowData.key);
           setactivityId(taskActivityRowData.key)
-          setTaskTitle(taskActivityRowData.name);
+          setTaskTitle(taskActivityRowData.data.name);
           if (taskActivityRowData.data.isActivity) {
             menu.current.toggle(event);
           } else {
@@ -336,6 +402,16 @@ const codeList = (toggleKeyDialog) =>{
               keys = {keys}
             />
           )}
+          {addExcuted && (
+                <AddExcutedTask
+                    onHide={toggleModalExcuted}
+                    visible={addExcuted}
+                    isActivity={true}
+                    activityId = {taskParentNode}
+                    taskParentId={taskParentNode}
+                    keys = {keys}
+                />
+            )}
           <Menu
             model={userActionItems}
             popup

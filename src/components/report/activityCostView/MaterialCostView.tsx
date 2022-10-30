@@ -101,7 +101,7 @@ export const MaterialCostView = ({
   };
   const removeActivity = (data) => {
     console.log(`remove rowData ${data.id}`);
-    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/deleteMaterialCost?materialCostId="+data.id;
+    const url = "http://172.16.0.56:8080/testApi/rest/registrationResource/deleteMaterialCost?materialCostId="+data.id;
     console.log(url)
     let works = async()=>await fetch(url,{
         
@@ -165,7 +165,8 @@ export const MaterialCostView = ({
         <Column header="Price" field="price" />
         <Column header="Unit" field="unit" />
         <Column header="Qty" field="quantity" />
-        <Column header="Executed Quantity" field="executedQuantity" />
+        <Column header="Date" field="updatedOn" />
+        {/*<Column header="Executed Quantity" field="executedQuantity" />*/}
         <Column header="Action" body={removeAction} />
       </DataTable>
 

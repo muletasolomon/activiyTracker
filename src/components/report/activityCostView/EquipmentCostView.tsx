@@ -27,7 +27,7 @@ export const EquipmentCostView = ({ modelId, cost,equipmentCost }) => {
   };
   const removeActivity = (data) => {
     console.log(`remove rowData ${data.id}`);
-    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/deleteEquipmentCost?equipmentCostId="+data.id;
+    const url = "http://172.16.0.56:8080/testApi/rest/registrationResource/deleteEquipmentCost?equipmentCostId="+data.id;
     console.log(url)
     let works = async()=>await fetch(url,{
         
@@ -114,6 +114,7 @@ export const EquipmentCostView = ({ modelId, cost,equipmentCost }) => {
         <Column field="quantity" header="Quantity" />
         <Column field="hourlyRate" header="Hourly Rate" />
         <Column field="operationHour" header="Operation Hour" />
+        <Column header="Date" field="updatedOn" />
         <Column field="utilityFactor" header="Utility Factor" />
         <Column header="Action" body={removeAction} />
       </DataTable>

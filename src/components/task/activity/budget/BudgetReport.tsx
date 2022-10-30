@@ -10,6 +10,7 @@ export const BudgetReport = ({
   equipmentCost,
   LaborCost,
   subContract,
+                               totalExcuted,
 }) => {
   const tasks: TaskActivityModel[] = useAppSelector(
     (state) => state.taskActivity.taskActivities
@@ -58,6 +59,10 @@ export const BudgetReport = ({
           <p className="flex flex-row justify-content-between font-semibold">
             <span>Total Cost</span>
             <span>{totalCost}</span>
+          </p>
+          <p className="flex flex-row justify-content-between font-semibold">
+            <span>Total Excuted</span>
+            <span>{totalExcuted}</span>
           </p>
           {parentTask && (
             <>

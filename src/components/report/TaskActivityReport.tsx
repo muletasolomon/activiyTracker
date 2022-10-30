@@ -10,23 +10,30 @@ import { BudgetReport } from "../task/activity/budget/BudgetReport";
 import { TaskActivityModel } from "../../model/TaskActivityModel";
 import { SubContractView } from "./activityCostView/SubContractView";
 import { LaborCostView } from "./activityCostView/LaborCostView";
+import {FormControl, Grid, TextField} from "@mui/material";
+import {DefaultBtn} from "../form/DefaultBtn";
 
 export const TaskActivityReport = () => {
   const params = useParams();
 
   const [title, setTitle] = useState("");
   const [queryParams, setQueryParams] = useSearchParams();
+  const [projectBudjet,setProjectBudjet] = useState();
+    const [excutedCost,setExcutedCost] = useState();
 
   const [taskChartData, setTaskChartData] = useState({});
 
   const [isParent, setIsParent] = useState(false);
 
   const [selectedTask, setSelectedTask] = useState<TaskActivityModel>();
+  const [selectReport, setSelectReport] = useState(false);
 
   const [equipmentCostTotal, setequipmentCostTotal] = useState<number>(0);
   const [materialCostTotal, setmaterialCostTotal] = useState<number>(0);
   const [laborCostTotal, setlabortCostTotal] = useState<number>(0);
   const [subContractTotal, setSubContractTotal] = useState<number>(0);
+
+  const [totalExcuted, setTotalExcuted] = useState<number>(0);
 
   const [materialCost,setMaterialCost] = useState();
   const [equpimentCost,setEqupimentCost] = useState();
@@ -47,9 +54,13 @@ export const TaskActivityReport = () => {
   });
 
   const workList = () =>{
-    console.log("ty");
-    
-    return fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getSubActivityDetail?subActivityId="+params.modelId,{
+    console.log("ty" + searchForm.startDate+" "+searchForm.endDate);
+    const request = {
+      id:params.modelId,
+      startDate:startDate+"T07:02:57.856Z",
+      endDate:endDate+"T07:02:57.856Z"
+    }
+    return fetch("http://172.16.0.56:8080/testApi/rest/subactivities/getSubActivityDetail?subActivityId="+params.modelId,{
         
         method: 'GET',
         headers: {
@@ -66,29 +77,95 @@ export const TaskActivityReport = () => {
         setlabortCostTotal(data.totalLaborCostPerDay);
         setequipmentCostTotal(data.totalEquipmentCostPerDay);
         setSubContractTotal(data.subContractCost);
-        console.log(materialCostTotal)
+      setTotalExcuted(data.executeQuantity);
+        setProjectBudjet(data.subActivity.projectBudjet)
+      console.log(materialCostTotal)
         //setMaterialCost(material)
         setMaterialCost(data.materialCosts);
         setEqupimentCost(data.equipmentCosts);
         setLaborCosts(data.laborCosts);
         setSubContractCosts(data.subContractCosts);
-        // setSelectedTask(true)
+        setExcutedCost(data.executeQuantity)
+      setTaskChartData({
+        labels: ["Equipment Cost", "Material Cost", "Labor Cost","Sub-Contract Cost"],
+        datasets: [
+          {
+            data: [data.totalEquipmentCostPerDay, data.totalMaterialCost, data.totalLaborCostPerDay,data.subContractCost],
+            backgroundColor: ["#AF4384", "#36A2EB", "#FFCE56","#EFEFEF"],
+            hoverBackgroundColor: ["#AF4384", "#36A2EB", "#FFCE56","E6E6E6"],
+          },
+        ],
+      });
+
+        setSelectReport(true);
     }).catch(error => {
         console.log(error);
     });
    // const data = await res.json();
     //console.log(data);
 }
+  const workListSearch = () =>{
+    console.log("ty" + searchForm.startDate+" "+searchForm.endDate);
+    const request = {
+      id:params.modelId,
+      date:searchForm.endDate+"T07:02:57.856Z",
+    }
+    return fetch("http://172.16.0.56:8080/testApi/rest/subactivities/getSubActivityDetailByDate",{
 
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode: 'cors',
+      body:JSON.stringify(request)
+    }).then((response) => {
+      return response.json();
+    }).then(data => {
+      console.log(data);
+      var material = 0;
+      setmaterialCostTotal(data.totalMaterialCost);
+      setlabortCostTotal(data.totalLaborCostPerDay);
+      setequipmentCostTotal(data.totalEquipmentCostPerDay);
+      setSubContractTotal(data.subContractCost);
+      setTotalExcuted(data.executeQuantity);
+        setProjectBudjet(data.subActivity.projectBudjet)
+
+        console.log(materialCostTotal)
+      //setMaterialCost(material)
+      setMaterialCost(data.materialCosts);
+      setEqupimentCost(data.equipmentCosts);
+      setLaborCosts(data.laborCosts);
+        setExcutedCost(data.executeQuantity)
+        setSubContractCosts(data.subContractCosts);
+      setTaskChartData({
+        labels: ["Equipment Cost", "Material Cost", "Labor Cost","Sub-Contract Cost"],
+        datasets: [
+          {
+            data: [data.totalEquipmentCostPerDay, data.totalMaterialCost, data.totalLaborCostPerDay,data.subContractCost],
+            backgroundColor: ["#AF4384", "#36A2EB", "#FFCE56","#EFEFEF"],
+            hoverBackgroundColor: ["#AF4384", "#36A2EB", "#FFCE56","E6E6E6"],
+          },
+        ],
+      });
+      // setSelectedTask(true);
+
+      // setSelectedTask(true)
+    }).catch(error => {
+      console.log(error);
+    });
+    // const data = await res.json();
+    //console.log(data);
+  }
   useEffect(() => {
     setTitle(queryParams.get("name") || "");
   }, [queryParams]);
 
   useEffect(() => {
-    workList();
     const selectedTask = taskActivities.find(
       (task) => task.modelId == +params.modelId
     );
+    console.log("anteneh"+selectedTask)
 
     setSelectedTask(selectedTask);
 
@@ -101,26 +178,65 @@ export const TaskActivityReport = () => {
     setmaterialCostTotal(materialCostTotal ? materialCostTotal : 0);
     setlabortCostTotal(laborCostTotal ? laborCostTotal : 0);
     setSubContractTotal(subContractTotal ? subContractTotal : 0);
+    workList();
 
-    setTaskChartData({
-      labels: ["Equipment Cost", "Material Cost", "Labor Cost","Sub-Contract Cost"],
-      datasets: [
-        {
-          data: [equipmentCostTotal, materialCostTotal, laborCostTotal,subContractTotal],
-          backgroundColor: ["#AF4384", "#36A2EB", "#FFCE56","#EFEFEF"],
-          hoverBackgroundColor: ["#AF4384", "#36A2EB", "#FFCE56","E6E6E6"],
-        },
-      ],
-    });
+    // setTaskChartData({
+    //   labels: ["Equipment Cost", "Material Cost", "Labor Cost","Sub-Contract Cost"],
+    //   datasets: [
+    //     {
+    //       data: [equipmentCostTotal, materialCostTotal, laborCostTotal,subContractTotal],
+    //       backgroundColor: ["#AF4384", "#36A2EB", "#FFCE56","#EFEFEF"],
+    //       hoverBackgroundColor: ["#AF4384", "#36A2EB", "#FFCE56","E6E6E6"],
+    //     },
+    //   ],
+    // });
   }, [taskActivities]);
   console.log(taskChartData)
+  const [searchForm, setForm] = React.useState({
+    searchParameter: "",
+    driverStatus: 0,
+    startDate: "",
+    endDate: ""
+  });
+  const { startDate, endDate } = searchForm;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...searchForm, [name]: value });
+  };
+    console.log("+++++++++++++++++++"+JSON.stringify(queryParams));
 
-  return (
+
+    return (
     <>
       <div className="w-screen w-screen">
         <div className="m-4 p-4">
+
           <p className="text-2xl text-800 font-bold my-4">Report For {title}</p>
-          {/* <Divider /> */}
+            <p className="text-2xl text-500  my-4">total budget {projectBudjet}</p>
+            <p className="text-2xl text-500  my-4">Excuted Quantity {excutedCost}</p>
+
+            {/* <Divider /> */}
+          <div className="flex fl justify-content">
+
+          <Grid item xs="auto" className="form-control-aligment">
+            <FormControl>
+              <TextField
+                  id="date"
+                  label="End Date"
+                  type="date"
+                  value={endDate}
+                  name="endDate"
+                  onChange={handleChange}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+              />
+            </FormControl>
+          </Grid>
+            <DefaultBtn name={"Filter"} callBack={workListSearch} style={"form-control-aligment"} />
+
+
+        </div>
           <div className="grid">
             <div className="col-7">
               <Divider />
@@ -166,14 +282,15 @@ export const TaskActivityReport = () => {
                     style={{ width: "40%" }}
                   />
 
-                  {selectedTask && (
+                  {selectReport && (
                     <BudgetReport
                       modelId={params.modelId}
-                      isParent={!selectedTask.isActivity}
+                      isParent={true}
                       LaborCost={laborCostTotal}
                       equipmentCost={equipmentCostTotal}
                       materialCost={materialCostTotal}
                       subContract={subContractTotal}
+                      totalExcuted={totalExcuted}
                     />
                   )}
 

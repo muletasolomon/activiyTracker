@@ -25,11 +25,12 @@ export const AddSubContractDialog = ({
     ,"price":price
     ,"subContractHour":subContractHour
     ,"date":date+"T01:36:08.775Z"}
-    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/registerSubConractCost"; 
+    const url = "http://172.16.0.56:8080/testApi/rest/registrationResource/registerSubConractCost"; 
     axios.post(url,formData,{
       headers:{"Content-Type" : "application/json"}})
     .then(res => {
-       onHide()
+      window.location.reload();
+      onHide()
     })
     .catch(err => console.log(err));
   }

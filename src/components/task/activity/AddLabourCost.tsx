@@ -37,12 +37,13 @@ export const AddLabourCost = ({
     ,"utilityFactor":utilityFactor 
     ,"totalHour":totalHour
     ,"date":date+"T01:36:08.775Z"}
-    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/registerLaborCost"; 
+    const url = "http://172.16.0.56:8080/testApi/rest/registrationResource/registerLaborCost"; 
     axios.post(url,formData,{
       headers:{"Content-Type" : "application/json"}})
     .then(res => {
         console.log(res.data)
-        onHide();
+        window.location.reload();
+        onHide()
     })
     .catch(err => console.log(err));
 

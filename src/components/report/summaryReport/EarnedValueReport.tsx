@@ -68,7 +68,7 @@ export const EarnedValueReport = ({
       endDate:endDate+"T07:02:57.856Z",
       searchParam:searchKey
     }
-    let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/Report/earnedValueReport",{
+    let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/Report/earnedValueReport",{
         
         method: 'POST',
         headers: {
