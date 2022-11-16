@@ -13,6 +13,8 @@ import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { DefaultBtn } from "../../form/DefaultBtn";
 import { FormInput } from "../../form/FormInput";
 import { AddMaterialCost } from "../../task/activity/AddMaterialCost";
+import {FormDropDown} from "../../FormDropDown";
+import {useLocation} from "react-router-dom";
 
 export const CostBudgetReport = ({
   title,
@@ -34,6 +36,7 @@ export const CostBudgetReport = ({
   const taskActivities = useAppSelector(
     (state) => state.taskActivity.taskActivities
   );
+    const location = useLocation();
 
   const [isParent, setIsParent] = useState(false);
   const [searchForm, setForm] = React.useState({
@@ -74,7 +77,7 @@ export const CostBudgetReport = ({
       endDate:endDate+"T07:02:57.856Z",
       searchParam:searchKey
     }
-    let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/Report/budgetReport",{
+    let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/Report/budgetReport",{
         
         method: 'POST',
         headers: {
@@ -133,10 +136,18 @@ export const CostBudgetReport = ({
               labelName={"Search"}
               onUpdate={(val) => setSearchKey(val)}
             />
-            <FormInput
-              defaultValue={""}
-              labelName={"Cost code"}
-              onUpdate={(val) => setCostCode(val)}
+            {/*<FormInput*/}
+              {/*defaultValue={""}*/}
+              {/*labelName={"Cost code"}*/}
+              {/*onUpdate={(val) => setCostCode(val)}*/}
+            {/*/>*/}
+
+            <FormDropDown
+                defaultValue={""}
+                onUpdate={(val)=>setCostCode(val.id)}
+                label={"Cost Code"}
+                options={location.state.codes}
+                customClass={"my-2"}
             />
 
             <Grid item xs="auto" className="form-control-aligment">

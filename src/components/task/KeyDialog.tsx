@@ -22,7 +22,7 @@ export const AddKeyDialog = ({ onHide, visible }) => {
       "descirption":description,
       "updatedOn":"2022-10-06T06:01:21.260Z"
     }
-    let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/registrationResource/registerCostCode",{
+    let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/registrationResource/registerCostCode",{
           
           method: 'POST',
           headers: {

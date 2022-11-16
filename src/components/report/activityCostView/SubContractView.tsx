@@ -29,7 +29,7 @@ export const SubContractView = ({ modelId, cost,subContaract }) => {
 
   const removeActivity = (data) => {
     console.log(`remove rowData ${data.id}`);
-    const url = "http://172.16.0.56:8080/testApi/rest/registrationResource/deleteSubcontractCost?subcontractCostId="+data.id;
+    const url = "http://196.189.53.130:20998/testApi/rest/registrationResource/deleteSubcontractCost?subcontractCostId="+data.id;
     console.log(url)
     let works = async()=>await fetch(url,{
         

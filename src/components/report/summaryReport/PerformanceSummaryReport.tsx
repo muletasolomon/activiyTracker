@@ -13,6 +13,9 @@ import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { DefaultBtn } from "../../form/DefaultBtn";
 import { FormInput } from "../../form/FormInput";
 import { AddMaterialCost } from "../../task/activity/AddMaterialCost";
+import {Dropdown} from "primereact";
+import {useLocation} from "react-router-dom";
+import {FormDropDown} from "../../FormDropDown";
 
 export const PerformanceSummaryReport = ({
   title,
@@ -32,12 +35,17 @@ export const PerformanceSummaryReport = ({
     (state) => state.taskActivity.taskActivities
   );
 
+  const location = useLocation();
+
   const [searchKey, setSearchKey] = useState();
   const [ keyFilter,setKeyFilter] = useState({});
   const [costCode, setCostCode] = useState();
   const [show,isShow] = useState(false);
   const [isParent, setIsParent] = useState(false);
-  const [searchForm, setForm] = React.useState({
+    const [key, setKey] = useState("");
+    const [code, setCode] = useState([]);
+
+    const [searchForm, setForm] = React.useState({
     searchParameter: "",
     driverStatus: 0,
     startDate: "",
@@ -53,8 +61,9 @@ export const PerformanceSummaryReport = ({
   };
 
   useEffect(() => {
-    let materialList: MaterialCost[] = [];
-    let laborCostList: LaborCost[] = [];
+    // let materialList: MaterialCost[] = [];
+    // let laborCostList: LaborCost[] = [];
+    //   console.log(location.state.codes)
     workList();
   }, [taskActivities]);
 
@@ -67,7 +76,7 @@ export const PerformanceSummaryReport = ({
       endDate:endDate+"T07:02:57.856Z",
       searchParam:searchKey
     }
-    let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/Report/performanceSummaryReportOut",{
+    let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/Report/performanceSummaryReportOut",{
         
         method: 'POST',
         headers: {
@@ -123,6 +132,32 @@ export const PerformanceSummaryReport = ({
       />
     );
   };
+    const loadCodes = () => {
+        console.log("codes")
+        fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",{
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            mode: 'cors',
+        }).then((response) => {
+            return response.json();
+        }).then(pro => {
+            let res = [];
+            pro.map(element =>{
+                res.push({id:element.id,costCode:element.code,label:element.code.concat(" - ").concat(element.descirption)})
+            })
+            console.log(res);
+            setCode(res)
+
+            return pro;
+
+        }).catch(error => {
+            console.log(error);
+        });
+
+    };
 
   return (
 
@@ -134,11 +169,28 @@ export const PerformanceSummaryReport = ({
               labelName={"Search"}
               onUpdate={(val) => setSearchKey(val)}
             />
-            <FormInput
-              defaultValue={""}
-              labelName={"Cost code"}
-              onUpdate={(val) => setCostCode(val)}
+
+            {/*<label className="">Cost Code</label>*/}
+
+            <FormDropDown
+             defaultValue={""}
+             onUpdate={(val)=>setCostCode(val.id)}
+             label={"Cost Code"}
+             options={location.state.codes}
+             customClass={"my-2"}
             />
+
+            {/*<Dropdown*/}
+                {/*value={key}*/}
+                {/*options={location.state.codes}*/}
+                {/*filter*/}
+                {/*onChange={(e) => {*/}
+                    {/*console.log(e.value.label);*/}
+                    {/*setKey(e.value)*/}
+                    {/*setCostCode(e.value.id);*/}
+                {/*}}*/}
+            {/*/>*/}
+
 
             <Grid item xs="auto" className="form-control-aligment">
               <FormControl>
@@ -173,6 +225,7 @@ export const PerformanceSummaryReport = ({
 
 
           </div>
+
           <DefaultBtn name={"Filter"} callBack={addCostBudgetReport} style={"form-control-aligment"} />
 
         </div>

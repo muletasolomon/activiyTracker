@@ -80,7 +80,7 @@ export const CostCodeReport = () => {
   const workList = () =>{
     console.log("ty");
     
-    return fetch("http://172.16.0.56:8080/testApi/rest/subactivities/getSubActivityDetail?subActivityId="+params.modelId,{
+    return fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getSubActivityDetail?subActivityId="+params.modelId,{
         
         method: 'GET',
         headers: {

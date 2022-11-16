@@ -20,6 +20,7 @@ const loadInitCostCodes = (): CostCode[] => {
 export interface TaskActivityState {
   taskActivities: TaskActivityModel[];
   keys: CostCode[];
+  selectedProjectId:number;
 }
 
 export interface CostCode {
@@ -50,6 +51,7 @@ export interface EquipmentCostPayLoad {
 const initialState: TaskActivityState = {
   taskActivities: JSON.parse(localStorage.getItem("task-data")) || [],
   keys: JSON.parse(localStorage.getItem("cost-codes")) || loadInitCostCodes(),
+  selectedProjectId:0
 };
 
 export const taskActivitySlice = createSlice({
@@ -64,6 +66,10 @@ export const taskActivitySlice = createSlice({
         (task) => action.payload !== task.modelId
       );
     },
+    selectTask:(state,action:PayloadAction<number>)=>{
+      console.log('tasl');
+  state.selectedProjectId=action.payload;
+},
     updateTask: (state, action: PayloadAction<TaskActivityModel>) => {
       const taskIndex = findTaskIndex(
         state.taskActivities,
@@ -241,6 +247,7 @@ export const taskActivitySlice = createSlice({
 export const {
   addTask,
   updateTask,
+  selectTask,
   removeTask,
   addMaterialCost,
   addLaborCost,

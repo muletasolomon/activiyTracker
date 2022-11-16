@@ -38,7 +38,7 @@ export const AddExcutedTask = ({
   );
   const codeList = () =>{
    
-     fetch("http://172.16.0.56:8080/testApi/rest/subactivities/getCostCodeList",{
+     fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",{
         
         method: 'GET',
         headers: {
@@ -84,7 +84,7 @@ export const AddExcutedTask = ({
         "projectBudget":projectBudget
       }
       
-      let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/registrationResource/registerSubActivity",{
+      let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/registrationResource/registerSubActivity",{
           
           method: 'POST',
           headers: {
@@ -129,7 +129,7 @@ export const AddExcutedTask = ({
                 "date":searchForm.date+"T11:23:03.107Z"
             }
 
-            let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/registrationResource/registerExecutedQuantity",{
+            let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/registrationResource/registerExecutedQuantity",{
 
                 method: 'POST',
                 headers: {

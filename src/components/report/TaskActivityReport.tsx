@@ -60,7 +60,7 @@ export const TaskActivityReport = () => {
       startDate:startDate+"T07:02:57.856Z",
       endDate:endDate+"T07:02:57.856Z"
     }
-    return fetch("http://172.16.0.56:8080/testApi/rest/subactivities/getSubActivityDetail?subActivityId="+params.modelId,{
+    return fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getSubActivityDetail?subActivityId="+params.modelId,{
         
         method: 'GET',
         headers: {
@@ -110,7 +110,7 @@ export const TaskActivityReport = () => {
       id:params.modelId,
       date:searchForm.endDate+"T07:02:57.856Z",
     }
-    return fetch("http://172.16.0.56:8080/testApi/rest/subactivities/getSubActivityDetailByDate",{
+    return fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getSubActivityDetailByDate",{
 
       method: 'POST',
       headers: {

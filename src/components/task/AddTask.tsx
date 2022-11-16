@@ -25,6 +25,7 @@ export const AddTaskDialog = ({
   const [costCode,setCostCode]=useState();
   const [activity,setActivity]=useState();
   const [projectBudget,setProjectBudget]=useState();
+  const [projectQuantity,setProjectQuantity]=useState();
   const dispatch = useAppDispatch();
 
   const keyx = useAppSelector((state) =>
@@ -37,7 +38,7 @@ export const AddTaskDialog = ({
   );
   const codeList = () =>{
    
-     fetch("http://172.16.0.56:8080/testApi/rest/subactivities/getCostCodeList",{
+     fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",{
         
         method: 'GET',
         headers: {
@@ -78,7 +79,7 @@ export const AddTaskDialog = ({
         ,"budget":budget 
       }
       
-      let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/registrationResource/registerActivity",{
+      let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/registrationResource/registerActivity",{
           
           method: 'POST',
           headers: {
@@ -112,10 +113,11 @@ export const AddTaskDialog = ({
         "costCode":costCode,
          "unitCost":unitCost,
         "activity":activityId,
-        "projectBudget":projectBudget
+        "projectBudget":projectBudget,
+          "budgetedQuantity":projectQuantity
       }
       
-      let data = async()=>await fetch("http://172.16.0.56:8080/testApi/rest/registrationResource/registerSubActivity",{
+      let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/registrationResource/registerSubActivity",{
           
           method: 'POST',
           headers: {
@@ -202,6 +204,11 @@ export const AddTaskDialog = ({
               labelName={"Project Budget"}
               onUpdate={(val) => setProjectBudget(val)}
             />
+              <FormInput
+                  defaultValue={""}
+                  labelName={"Budgeted Quantity"}
+                  onUpdate={(val) => setProjectQuantity(val)}
+              />
             {/* <ControlledInput onUpdate={(val) => setKey(val)} type={"text"} defaultValue={""}/> */}
           </div>
         )}

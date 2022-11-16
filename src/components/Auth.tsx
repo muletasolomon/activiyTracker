@@ -12,7 +12,7 @@ export default function() {
   const navigate = useNavigate();
   const addMaterialCostCallBack = () => {
     
-    const url = "http://172.16.0.56:8080/testApi/rest/auth";
+    const url = "http://196.189.53.130:20998/testApi/rest/auth";
     let formData = {
       "username":name
     ,"password":password}
