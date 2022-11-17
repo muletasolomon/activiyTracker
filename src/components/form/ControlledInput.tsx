@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export function ControlledInput({ onUpdate, type,defaultValue }) {
+export function ControlledInput({ onUpdate, type,defaultValue,placeholder }) {
   const [value, setState] = useState(defaultValue);
   const handleChange = (e) => {
     setState(e.target.value);
@@ -15,6 +15,7 @@ export function ControlledInput({ onUpdate, type,defaultValue }) {
       type={inputType}
       value={value}
       onChange={handleChange}
+      placeholder={placeholder}
       className="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none ml-4 focus:border-primary"
     />
   );

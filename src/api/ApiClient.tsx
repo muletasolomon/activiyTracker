@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 
 export function useFetchProjectList() {
     const [projects,setProjects]=useState([]);
+    const [refetchData,setRefetchData]=useState([]);
 
     useEffect(()=>{
         const fetchTaskList=async ()=>{
@@ -12,7 +13,50 @@ export function useFetchProjectList() {
 
         fetchTaskList();
 
-    },[]);
+    },[refetchData]);
 
-    return {projects};
+    return {projects,refetchData,setRefetchData};
 }
+
+
+export function useAddProject() {
+    const [projectName,setProjectName]=useState();
+    const [budget,setBudget]=useState();
+    const [description,setDescription]=useState();
+    const [submit,setSubmit]=useState(false);
+
+    const data={
+        name:projectName,
+        description:description,
+        projectBudget:budget
+    };
+
+    console.log(data);
+
+    useEffect(()=>{
+        const submitAddProject=async ()=>{
+            fetch('http://196.189.53.130:20998/testApi/rest/subactivities/addProject', {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                mode: "cors",
+                body:JSON.stringify(data)
+              })
+                .then(resp=>resp.json());
+        };
+
+        if(submit){
+            submitAddProject();
+        }
+
+        setSubmit(false);
+
+    },[submit]);
+
+    return {setProjectName,setBudget,setDescription,setSubmit};
+}
+
+
+
