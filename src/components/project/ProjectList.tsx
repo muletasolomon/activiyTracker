@@ -20,7 +20,6 @@ export const ProjectList = ({}) => {
   const [showAddProject, setShowAddProject] = useState(false);
 
   const onProjectSelect = (project) => {
-    console.log(project);
     dispatch(selectTask(project.id));
   };
 
@@ -49,7 +48,7 @@ export const ProjectList = ({}) => {
     <>
       <h2>Projects</h2>
       <Divider />
-      <DefaultBtn name={"Add Project"} callBack={toggleAddProject} />
+     {localStorage.getItem('authorities') ==='ENGINEER' ? null: <DefaultBtn name={"Add Project"} callBack={toggleAddProject} />}
       {showAddProject && (
         <TemplateDialog
           isVisible={showAddProject}

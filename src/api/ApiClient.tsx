@@ -31,7 +31,6 @@ export function useAddProject() {
         projectBudget:budget
     };
 
-    console.log(data);
 
     useEffect(()=>{
         const submitAddProject=async ()=>{

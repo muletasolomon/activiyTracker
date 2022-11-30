@@ -8,8 +8,10 @@ import { addTask } from "../../store/features/taskActivitySlice";
 import { Divider } from "primereact/divider";
 import axios from "axios";
 import { FormInput } from "../form/FormInput";
+import { useFetchProjectList } from "../../api/ApiClient";
 
 export const AddTaskDialog = ({
+  data = null,
   onHide,
   visible,
   isActivity,
@@ -17,16 +19,18 @@ export const AddTaskDialog = ({
   keys,
   activityId
 }) => {
-  const [projectId, setProjectId] = useState(0);
+  console.log('AddTaskDialog', data)
+  const taskId = data.key ?? 0
+  const [projectId, setProjectId] = useState(data?.data?.projectId ?? 0);
   const [key, setKey] = useState("");
-  const [name, setName] = useState("");
-  const [budget,setBudget]=useState();
-  const [unitCost,setUnitCost]=useState();
+  const [name, setName] = useState(data?.data?.name?? "");
+  const [budget,setBudget]=useState(data?.data?.budget);
+  const [unitCost,setUnitCost]=useState(0);
   const [costCode,setCostCode]=useState();
-  const [activity,setActivity]=useState();
-  const [projectBudget,setProjectBudget]=useState();
-  const [projectQuantity,setProjectQuantity]=useState();
+  const [projectBudget,setProjectBudget]=useState(0);
+  const [projectQuantity,setProjectQuantity]=useState<number>();
   const dispatch = useAppDispatch();
+  const { projects } = useFetchProjectList();
 
   const keyx = useAppSelector((state) =>
     state.taskActivity.keys.map((data) => {
@@ -36,6 +40,8 @@ export const AddTaskDialog = ({
       };
     })
   );
+
+  console.log(projectQuantity)
   const codeList = () =>{
    
      fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",{
@@ -69,14 +75,14 @@ export const AddTaskDialog = ({
     //codeList()
   }, [keys]);
 
-  const addTaskOnClick = () => {
-
-    console.log("activity")
-
+  const addTaskOnClick = (e) => {
+    e.preventDefault()
     if(!isActivity){
       let request = {
+        "id": taskId>0? taskId : undefined,
         "name":name
-        ,"budget":budget 
+        ,"budget":budget,
+        "projectId": projectId
       }
       
       let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/registrationResource/registerActivity",{
@@ -91,7 +97,6 @@ export const AddTaskDialog = ({
         }).then((response) => {
           return response.json();                
       }).then(pro => {
-        window.location.reload();
            onHide()
           return pro
       
@@ -103,8 +108,8 @@ export const AddTaskDialog = ({
     
   };
 
-  const addSubTaskOnClick= () => {
-
+  const addSubTaskOnClick= (e) => {
+    e.preventDefault()
     if(isActivity){
       console.log("use")
 
@@ -129,7 +134,6 @@ export const AddTaskDialog = ({
         }).then((response) => {
           return response.json();                
       }).then(pro => {
-        window.location.reload();
            onHide()
           return pro
       
@@ -140,6 +144,7 @@ export const AddTaskDialog = ({
     }
     
   };
+  console.log(projects)
 
   return (
     <Dialog
@@ -152,23 +157,31 @@ export const AddTaskDialog = ({
         {!isActivity && (
           <>
             <div className="field ml-4">
-              <label className="">Name</label>
+              <label className="mr-3">Name</label>
 
               <ControlledInput
                 onUpdate={(val) => setName(val)}
+                placeholder={''}
                 type={"text"}
-                defaultValue={""}
+                defaultValue={name}
               />
             </div>
 
             <div className="field ml-4">
               <label className="">Budget</label>
-
               <ControlledInput
+                placeholder={''}
                 onUpdate={(val) => setBudget(val)}
                 type={"text"}
-                defaultValue={""}
+                defaultValue={budget}
               />
+            </div>
+            <div className="ml-4 mr-10 flex w-full">
+            <label className="mr-2">Project</label>
+            <select value={projectId} onChange={(e)=>setProjectId(parseInt(e.target.value,10))} defaultValue={projectId} name={'projectId'}  className="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none ml-4 focus:border-primary mr-7 w-full" id="project">
+              <option value={''}>Select project</option>
+               {projects.map(project=> <option value={project.id}>{project.name}</option>)}
+            </select>
             </div>
           </>
         )}
@@ -197,17 +210,29 @@ export const AddTaskDialog = ({
             <FormInput
               defaultValue={""}
               labelName={"Unit cost"}
-              onUpdate={(val) => setUnitCost(val)}
+              type={'number'}
+              onUpdate={(val) => {
+                setUnitCost(val)
+                const valPQ = parseInt(val,10) * projectBudget
+                setProjectQuantity(valPQ)
+              }}
             />
             <FormInput
               defaultValue={""}
+              type={'number'}
               labelName={"Project Budget"}
-              onUpdate={(val) => setProjectBudget(val)}
+              onUpdate={(val) =>{ 
+                setProjectBudget(val)
+                const valPQ = parseInt(val,10) * unitCost
+                setProjectQuantity(valPQ)
+              }}
             />
               <FormInput
-                  defaultValue={""}
+                  defaultValue={projectQuantity}
+                  type={'number'}
+                  disable={true}
                   labelName={"Budgeted Quantity"}
-                  onUpdate={(val) => setProjectQuantity(val)}
+                  onUpdate={(val) => console.log('')}
               />
             {/* <ControlledInput onUpdate={(val) => setKey(val)} type={"text"} defaultValue={""}/> */}
           </div>
@@ -219,7 +244,7 @@ export const AddTaskDialog = ({
           label={`${isActivity ? "Add Sub-Activity" : "Add Activity"}`}
           icon="pi pi-user"
           className="p-button-success p-button-outlined mb-2 ml-4"
-          onClick={() => !isActivity ?addTaskOnClick():addSubTaskOnClick()}
+          onClick={(e) => !isActivity ?addTaskOnClick(e):addSubTaskOnClick(e)}
           aria-controls="popup_menu"
           aria-haspopup
         />

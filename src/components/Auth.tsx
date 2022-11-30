@@ -19,8 +19,8 @@ export default function() {
     axios.post(url,formData,{
       headers:{"Content-Type" : "application/json"}})
     .then(res => {
-      console.log(res)
-       if(res.data.authorities === "ADMIN")
+      localStorage.setItem('token', res.data.token)
+      localStorage.setItem('authorities', res.data.authorities)
        navigate(`Home`)
 
     })

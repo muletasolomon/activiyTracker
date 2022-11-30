@@ -40,7 +40,6 @@ function App() {
   const subTaskMenu = useRef(null);
 
   const [addTaskToggle, setAddTaskToggle] = useState(false);
-  const [addExcuted, setAddExcuted] = useState(false);
   const [taskParentNode, setTaskParentNode] = useState(0);
   const [isActivity, setIsActivity] = useState(false);
   const [activityId, setactivityId] = useState(false);
@@ -54,20 +53,15 @@ function App() {
   const navigate = useNavigate();
 
   const [projectsActivity, setProjectsActivity] = useState([]);
+  const [selectedData, setSelectedData] = useState()
 
   useEffect(() => {
-    console.log(`selectedProjectId`);
-    console.log(selectedProjectId);
     workList();
   }, [selectedProjectId]);
 
   const toggleModal = () => {
     setAddTaskToggle(!addTaskToggle);
-    console.log(addExcuted);
-  };
-  const toggleModalExcuted = () => {
-    setAddExcuted(!addExcuted);
-    console.log(addExcuted);
+    workList()
   };
 
   const addTaskOnClick = () => {
@@ -101,9 +95,7 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("works");
     workList();
-    console.log(projectsActivity);
     const treeData = mapTaskActivityToTree(taskActivities);
     const parents = taskActivities.filter(
       (activity) => activity.parentId === 0
@@ -114,7 +106,6 @@ function App() {
   }, [taskActivities]);
 
   const addSubActivity = () => {
-    console.log("subactivity");
     fetch(
       "http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",
       {
@@ -138,9 +129,7 @@ function App() {
             label: element.code.concat(" - ").concat(element.descirption),
           });
         });
-        console.log(res);
         setKeys(res);
-        console.log("types", types);
         if (typesRef.current === "") {
           setIsActivity(true);
           toggleModal();
@@ -161,8 +150,6 @@ function App() {
   };
 
   const removeActivity = () => {
-    console.log(`remove rowData ${taskParentNode}`);
-
     let data = async () =>
       await fetch(
         "http://196.189.53.130:20998/testApi/rest/registrationResource/deleteActivity?activityId=" +
@@ -190,8 +177,6 @@ function App() {
   };
 
   const removeSubActivity = () => {
-    console.log(`remove rowData ${taskParentNode}`);
-
     let data = async () =>
       await fetch(
         "http://196.189.53.130:20998/testApi/rest/registrationResource/deleteSubActivity?activityId=" +
@@ -245,6 +230,13 @@ function App() {
       command: () => addSubActivity(),
     },
     {
+      label: "Edit",
+      icon: "pi pi-file-edit",
+      command: () => {
+        toggleModal();
+      },
+    },
+    {
       label: "Remove Activity",
       icon: "pi pi-trash",
       command: () => {
@@ -267,10 +259,10 @@ function App() {
         navigate(`activityReport/${taskParentNode}?name=${taskTitle}`),
     },
     {
-      label: "Excuted Quntity",
-      icon: "pi pi-chart-pie",
+      label: "Edit",
+      icon: "pi pi-file-edit",
       command: () => {
-        toggleModalExcuted();
+        toggleModal();
       },
     },
     {
@@ -284,7 +276,6 @@ function App() {
 
   const workList = () => {
     if (selectedProjectId) {
-      console.log("ty");
       let dataSample = [];
       let data = async () =>
         await fetch(
@@ -302,25 +293,24 @@ function App() {
             return response.json();
           })
           .then((pro) => {
-            console.log(pro);
             let data = [];
             pro.map((element) => {
-              console.log(element);
               data.push({
                 key: element.id,
                 data: {
                   name: element.name,
                   budget: element.description,
+                  projectId: element?.project?.id,
                   isActivity: true,
                 },
                 children: [
                   ...element.subActivityList.map((subactiv) => {
-                    console.log("subactiv", subactiv);
                     return {
                       key: subactiv.id,
                       data: {
                         name: subactiv.name,
                         budget: subactiv.projectBudjet,
+                        projectId: subactiv.activity?.project?.id,
                         isActivity: false,
                       },
                     };
@@ -329,7 +319,6 @@ function App() {
               });
             });
             setProjectsActivity(data);
-            console.log(projectsActivity);
 
             return data;
           })
@@ -337,7 +326,6 @@ function App() {
             console.log(error);
           });
       data();
-      console.log(projectsActivity);
 
     }
   };
@@ -376,8 +364,6 @@ function App() {
         });
     data();
 
-    // const data = await res.json();
-    //console.log(data);
   };
 
   const taskNameView = (taskRowData: TaskActivityModel) => {
@@ -395,10 +381,11 @@ function App() {
         className="p-button-outlined text-500 border-0"
         onClick={(event) => {
           const { data } = taskActivityRowData;
-          console.log(taskActivityRowData);
+          console.log('taskActivityRowData', taskActivityRowData, menu, subTaskMenu)
           setTaskParentNode(taskActivityRowData.key);
           setactivityId(taskActivityRowData.key);
           setTaskTitle(taskActivityRowData.data.name);
+          setSelectedData(taskActivityRowData)
           if (taskActivityRowData.data.isActivity) {
             menu.current.toggle(event);
           } else {
@@ -433,30 +420,10 @@ function App() {
   };
 
   const onShow = (rowData) => {
-    console.log(rowData);
+    console.log('rowData', rowData);
   };
 
-  const actionTemplate = (node, column) => {
-    return (
-      <div className="px-4">
-        <Button
-          type="button"
-          icon="pi pi-plus"
-          className="p-button-outlined p-button-secondary mx-4 px-2"
-        >
-          <span className="px-2">Task</span>
-        </Button>
 
-        <Button
-          type="button"
-          icon="pi pi-plus"
-          className="p-button-outlined p-button-secondary"
-        >
-          <span className="px-2">Activity</span>
-        </Button>
-      </div>
-    );
-  };
   return (
     <>
       <ConfirmDialog />
@@ -465,6 +432,7 @@ function App() {
         <div className="bg-white mt-4 mx-6 px-8">
           {addTaskToggle && (
             <AddTaskDialog
+              data={selectedData}
               onHide={toggleModal}
               visible={addTaskToggle}
               isActivity={isActivity}
@@ -473,18 +441,8 @@ function App() {
               keys={keys}
             />
           )}
-          {addExcuted && (
-            <AddExcutedTask
-              onHide={toggleModalExcuted}
-              visible={addExcuted}
-              isActivity={true}
-              activityId={taskParentNode}
-              taskParentId={taskParentNode}
-              keys={keys}
-            />
-          )}
           <Menu
-            model={userActionItems}
+            model={localStorage.getItem('authorities') ==='ENGINEER' ? undefined : userActionItems}
             popup
             ref={menu}
             id="popup_menu"
@@ -520,6 +478,7 @@ function App() {
                   onClick={() => addTaskOnClick()}
                   aria-controls="popup_menu"
                   aria-haspopup
+                  disabled={localStorage.getItem('authorities') ==='ENGINEER'}
                 />
                 <Button
                   label="Cost Budget Report"

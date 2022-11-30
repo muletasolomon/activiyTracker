@@ -96,7 +96,6 @@ export const AddExcutedTask = ({
         }).then((response) => {
           return response.json();                
       }).then(pro => {
-        window.location.reload();
            onHide()
           return pro
       
@@ -141,7 +140,6 @@ export const AddExcutedTask = ({
             }).then((response) => {
                 return response.json();
             }).then(pro => {
-                window.location.reload();
                  onHide()
                 return pro
 
@@ -197,6 +195,7 @@ export const AddExcutedTask = ({
             <FormInput
               defaultValue={""}
               labelName={"Excuted Quantity"}
+              type={'number'}
               onUpdate={(val) => setUnitCost(val)}
             />
               <Grid item xs="auto" className="form-control-aligment mt-4">

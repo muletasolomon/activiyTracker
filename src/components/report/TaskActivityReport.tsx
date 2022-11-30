@@ -12,10 +12,11 @@ import { SubContractView } from "./activityCostView/SubContractView";
 import { LaborCostView } from "./activityCostView/LaborCostView";
 import {FormControl, Grid, TextField} from "@mui/material";
 import {DefaultBtn} from "../form/DefaultBtn";
+import { AddExcutedTask } from "../task/AddExcutedTask";
 
 export const TaskActivityReport = () => {
   const params = useParams();
-
+  console.log('params', params)
   const [title, setTitle] = useState("");
   const [queryParams, setQueryParams] = useSearchParams();
   const [projectBudjet,setProjectBudjet] = useState();
@@ -42,6 +43,15 @@ export const TaskActivityReport = () => {
   const taskActivities: TaskActivityModel[] = useAppSelector(
     (state) => state.taskActivity.taskActivities
   );
+  const [addExcuted, setAddExcuted] = useState(false);
+  const [taskParentNode, setTaskParentNode] = useState(0);
+  const [keys, setKeys] = useState([]);
+
+  const toggleModalExcuted = () => {
+    setAddExcuted(!addExcuted);
+    workList()
+  };
+
 
   const [lightOptions] = useState({
     plugins: {
@@ -295,6 +305,12 @@ export const TaskActivityReport = () => {
                   )}
 
                   <Button
+                    icon= "pi pi-chart-pie"
+                    label="Executed Quntity"
+                    className="p-button-outlined p-button-secondary mt-8"
+                    onClick={toggleModalExcuted}
+                  />
+                  <Button
                     icon="pi pi-print"
                     label="Export Task Report"
                     className="p-button-outlined p-button-secondary mt-8"
@@ -302,6 +318,16 @@ export const TaskActivityReport = () => {
                   />
                 </>
               )}
+              {addExcuted && (
+            <AddExcutedTask
+              onHide={toggleModalExcuted}
+              visible={addExcuted}
+              isActivity={true}
+              activityId={taskParentNode}
+              taskParentId={params.modelId}
+              keys={keys}
+            />
+          )}
             </div>
           </div>
         </div>

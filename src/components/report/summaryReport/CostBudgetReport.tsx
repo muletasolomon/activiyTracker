@@ -15,6 +15,7 @@ import { FormInput } from "../../form/FormInput";
 import { AddMaterialCost } from "../../task/activity/AddMaterialCost";
 import {FormDropDown} from "../../FormDropDown";
 import {useLocation} from "react-router-dom";
+import { useFetchProjectList } from "../../../api/ApiClient";
 
 export const CostBudgetReport = ({
   title,
@@ -27,8 +28,9 @@ export const CostBudgetReport = ({
   const [searchKey, setSearchKey] = useState();
   const [ keyFilter,setKeyFilter] = useState({});
   const [costCode, setCostCode] = useState();
+  const [projectId, setProjectId] = useState<number>();
   const [show,isShow] = useState(false);
-
+  const { projects } = useFetchProjectList();
   const toast = useRef();
 
   const dispatch = useAppDispatch();
@@ -68,6 +70,8 @@ export const CostBudgetReport = ({
     workList();
   }
 
+  console.log('projects', projects)
+
   const workList = () =>{
     console.log("+++++++++++"+JSON.stringify(searchFilter));
     let dataSample = []
@@ -75,7 +79,8 @@ export const CostBudgetReport = ({
       costCode:costCode,
       startDate:startDate+"T07:02:57.856Z",
       endDate:endDate+"T07:02:57.856Z",
-      searchParam:searchKey
+      searchParam:searchKey,
+      projectId: projectId
     }
     let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/Report/budgetReport",{
         
@@ -149,6 +154,13 @@ export const CostBudgetReport = ({
                 options={location.state.codes}
                 customClass={"my-2"}
             />
+
+          <div className="ml-4 mr-10 flex w-64">
+            <select value={projectId} onChange={(e)=>setProjectId(parseInt(e.target.value,10))} defaultValue={projectId} name={'projectId'}  className="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none ml-4 focus:border-primary mr-7 w-full" id="project">
+              <option value={''}>Select project</option>
+               {projects.map(project=> <option value={project.id}>{project.name}</option>)}
+            </select>
+            </div>
 
             <Grid item xs="auto" className="form-control-aligment">
               <FormControl>
