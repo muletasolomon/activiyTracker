@@ -65,7 +65,7 @@ export const EquipmentCostView = ({ modelId, cost,equipmentCost }) => {
       <Button
         icon="pi pi-trash"
         className="p-button-outlined p-button-sm p-button-danger"
-        onClick={() => confirmTaskRemoval(data)}
+        onClick={() =>  removeActivity(data)}
       />
     );
   };

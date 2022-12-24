@@ -42,7 +42,7 @@ function App() {
   const [addTaskToggle, setAddTaskToggle] = useState(false);
   const [taskParentNode, setTaskParentNode] = useState(0);
   const [isActivity, setIsActivity] = useState(false);
-  const [activityId, setactivityId] = useState(false);
+  const [activityId, setactivityId] = useState();
   const [taskTitle, setTaskTitle] = useState("");
   const [types, setType] = useState("");
   const typesRef = useRef(types);
@@ -233,6 +233,8 @@ function App() {
       label: "Edit",
       icon: "pi pi-file-edit",
       command: () => {
+
+        setIsActivity(false)
         toggleModal();
       },
     },
@@ -262,6 +264,8 @@ function App() {
       label: "Edit",
       icon: "pi pi-file-edit",
       command: () => {
+        setIsActivity(true);
+        console.log("++++++++++++++++"+taskParentNode)
         toggleModal();
       },
     },

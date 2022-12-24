@@ -20,10 +20,10 @@ export const AddTaskDialog = ({
   activityId
 }) => {
   console.log('AddTaskDialog', data)
-  const taskId = data.key ?? 0
-  const [projectId, setProjectId] = useState(data?.data?.projectId ?? 0);
+  const taskId = data?data.key: 0
+  const [projectId, setProjectId] = useState(data?data.projectId : 0);
   const [key, setKey] = useState("");
-  const [name, setName] = useState(data?.data?.name?? "");
+  const [name, setName] = useState(data? data.name: "");
   const [budget,setBudget]=useState(data?.data?.budget);
   const [unitCost,setUnitCost]=useState(0);
   const [costCode,setCostCode]=useState();
@@ -41,7 +41,7 @@ export const AddTaskDialog = ({
     })
   );
 
-  console.log(projectQuantity)
+  console.log("+++++++++++++++++++++++++"+taskParentId)
   const codeList = () =>{
    
      fetch("http://196.189.53.130:20998/testApi/rest/subactivities/getCostCodeList",{
@@ -116,10 +116,11 @@ export const AddTaskDialog = ({
       let request = {
         "name":name,
         "costCode":costCode,
-         "unitCost":unitCost,
+          "unitCost":unitCost,
         "activity":activityId,
-        "projectBudget":projectBudget,
-          "budgetedQuantity":projectQuantity
+        "projectBudget":projectQuantity,
+          "budgetedQuantity":projectBudget,
+          "id":null
       }
       
       let data = async()=>await fetch("http://196.189.53.130:20998/testApi/rest/registrationResource/registerSubActivity",{
@@ -218,21 +219,25 @@ export const AddTaskDialog = ({
               }}
             />
             <FormInput
-              defaultValue={""}
+              // defaultValue={""}
               type={'number'}
-              labelName={"Project Budget"}
-              onUpdate={(val) =>{ 
-                setProjectBudget(val)
-                const valPQ = parseInt(val,10) * unitCost
-                setProjectQuantity(valPQ)
-              }}
+              // labelName={"Project Budget"}
+              labelName={`${isActivity ? "Sub Activity Budgeted" : "Budgeted Quantity"}`}
+
+              defaultValue={projectQuantity}
+              onUpdate={(val) => console.log('')}
+              disable={true}
+
             />
               <FormInput
-                  defaultValue={projectQuantity}
+                  defaultValue={""}
                   type={'number'}
-                  disable={true}
                   labelName={"Budgeted Quantity"}
-                  onUpdate={(val) => console.log('')}
+                  onUpdate={(val) =>{
+                      setProjectBudget(val)
+                      const valPQ = parseInt(val,10) * unitCost
+                      setProjectQuantity(valPQ)
+                  }}
               />
             {/* <ControlledInput onUpdate={(val) => setKey(val)} type={"text"} defaultValue={""}/> */}
           </div>
@@ -241,7 +246,7 @@ export const AddTaskDialog = ({
         <Divider />
 
         <Button
-          label={`${isActivity ? "Add Sub-Activity" : "Add Activity"}`}
+          label={`${isActivity ? "Save" : "Save"}`}
           icon="pi pi-user"
           className="p-button-success p-button-outlined mb-2 ml-4"
           onClick={(e) => !isActivity ?addTaskOnClick(e):addSubTaskOnClick(e)}
